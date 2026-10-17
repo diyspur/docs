@@ -41,10 +41,12 @@ flowchart TD
         FILA["/minha-fila"]
     end
     
-    subgraph ConsoleAdmin ["Console Administrativo (/admin)"]
-        ADMIN_BOOKS["/admin/books"]
-        ADMIN_SEASONS["/admin/seasons/[id]"]
-        ADMIN_MOD["/admin/moderation"]
+    subgraph ConsoleAdmin ["Console Administrativo (Repositório Independente diyspur/admin)"]
+        ADMIN_DASH["/admin (Dashboard & Atalhos)"]
+        ADMIN_BOOKS["/admin/books (Obras & Capas)"]
+        ADMIN_SEASONS["/admin/seasons/[id] (Cronogramas)"]
+        ADMIN_MOD["/admin/moderation (Fila de Moderação)"]
+        ADMIN_AUTH["/entrar (Auto-Login & Sessão)"]
     end
 ```
 
@@ -121,12 +123,20 @@ flowchart TD
 
 ---
 
-### 2.9 Console Administrativo & Moderação (`/admin/**`)
-- **Propósito:** Operação editorial e governança de comunidade.
-- **Telas:**
-  - `/admin/books`: Catálogo com upload de capas via HTTPS obrigatório.
-  - `/admin/seasons/[id]`: Gestão de capítulos e cronograma.
-  - `/admin/moderation`: Fila de denúncias comunitárias com ações imediatas de ocultar conteúdo, resolver ou dispensar.
+### 2.9 Console Administrativo & Moderação (Repositório Independente `diyspur/admin`)
+- **Separação Arquitetural:** O console administrativo foi completamente desacoplado da aplicação do leitor (`diyspur-cloud/app`) e reside em seu próprio repositório dedicado ([diyspur/admin](https://github.com/diyspur/admin)), com deploy independente em `admin.diyspur.com` (ou Vercel isolado).
+- **Propósito:** Operação editorial, governança de comunidade, gerenciamento do catálogo e curadoria de conteúdo com privilégios de `service_role` e isolamento total de pacotes e rotas.
+- **Navegação Global:** O admin possui cabeçalho persistente (`AdminNav`) com menu clicável em todas as telas para alternância ágil entre Dashboard (`/admin`), Livros (`/admin/books`), Temporadas (`/admin/seasons`) e Moderação (`/admin/moderation`), além de seletor de tema.
+- **Autenticação e Auto-Login:**
+  - Conta administrativa dedicada pré-configurada no Supabase Auth.
+  - Endpoint `/api/auth/auto-login` e componente `AutoAuth` para autenticação silenciosa de desenvolvedores e operadores autorizados, com persistência via cookie seguro `diyspur_admin_session`.
+  - Endpoint `/api/auth/create-admin` para provisionamento automático do usuário `admin@diyspur.com` na inicialização do serviço.
+- **Telas Principais:**
+  - `/admin`: Dashboard executivo com contadores de livros cadastrados, temporadas ativas, pendências de moderação e atalhos rápidos.
+  - `/admin/books`: Catálogo com upload de capas via HTTPS obrigatório e criação rápida de obras.
+  - `/admin/seasons`: Listagem de temporadas canônicas cadastradas.
+  - `/admin/seasons/[id]`: Gestão de capítulos, cronograma semanal e pílulas de debate.
+  - `/admin/moderation`: Fila de denúncias comunitárias (`content_reports`) com ações imediatas de ocultar conteúdo, resolver ou dispensar.
 
 ---
 

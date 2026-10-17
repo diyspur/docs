@@ -2,9 +2,8 @@
 
 > **Projeto:** DIYSpur (Reading Club & Second Screen Platform)  
 > **Status:** Produção / Staging / Homologado v1.0  
-> **Ambiente Web:** [diyspur.vercel.app](https://diyspur.vercel.app)  
-> **Repositórios:** [Frontend & App](https://github.com/diyspur-cloud/app) | [Backend & Database](https://github.com/diyspur-cloud/db)  
-> **Data de Consolidação:** Outubro de 2026  
+> **Repositórios:** [Frontend & Leitor](https://github.com/diyspur-cloud/app) | [Console Administrativo & Editorial](https://github.com/diyspur/admin) | [Backend & Database](https://github.com/diyspur-cloud/db) | [Documentação](https://github.com/diyspur/docs)  
+> **Data de Consolidação:** Outubro de 2026 (Refatoração de Desacoplamento do Console Admin)  
 > **Padrão de Documentação:** Obsidian Markdown com Links Bidirecionais (`[[...]]`)
 
 ---
@@ -72,7 +71,7 @@ graph TD
 - **[[00 - Visao Geral do Projeto]]**: O conceito de *segunda tela* literária, o ecossistema omnicanal (Web + YouTube + TikTok + Instagram), governança de produto e Mobile-First.
 
 ### Bloco 01: Arquitetura, Dados e Engenharia de Sistemas
-- **[[01 - Arquitetura Frontend e Backend]]**: Next.js 16 (App Router / Turbopack), React 19, TypeScript, Supabase, Vercel e pipeline de CI/CD.
+- **[[01 - Arquitetura Frontend e Backend]]**: Arquitetura desacoplada em múltiplos frontends: **`app`** (experiência do leitor) e **`admin`** (console administrativo & editorial dedicado), Next.js 16 (App Router / Turbopack), React 19, TypeScript, Supabase SSR e Vercel.
 - **[[01.1 - Modelo de Dados e Seguranca RLS]]**: 82 tabelas relacionais, 12 migrações incrementais M01–M12, invariantes RLS e views anti-spoiler.
 - **[[01.2 - Inteligencia Artificial e Recomendacao Semantica]]**: Extensão `pgvector`, embeddings em 1536 dimensões, matching de leitores (*Reader Match*) e similaridade de cosseno.
 - **[[01.3 - Engenharia de Performance e Seguranca Avancada]]**: Otimização com RLS InitPlans `(SELECT auth.uid())`, concorrência otimista com `version`, e matriz de segurança das 11 Edge Functions Deno.
@@ -98,7 +97,7 @@ graph TD
 - **[[04.1 - Motor de Compartilhamento Social e Viral Loops]]**: Renderização assíncrona de cartões visuais para Instagram Stories e TikTok (`social_render_jobs`), Web Share API nativa e flywheel orgânico de UGC.
 
 ### Bloco 05: Qualidade, QA e Operação
-- **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suíte de 31 arquivos de testes e 132 testes unitários no Vitest, cobertura de build do Next.js e bateria PGlite de testes de banco.
+- **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suítes de testes automatizados: 30 arquivos e 128 testes unitários no `app`, 2 arquivos e 7 testes no `admin`, cobertura de build Next.js e bateria PGlite de testes de banco.
 - **[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]**: Procedimentos de release, boas práticas de migrações aditivas, configuração de crons e resposta a incidentes.
 - **[[05.3 - Guia Completo de Deploy Vercel e Supabase]]**: Procedimento Operacional Padrão (SOP) para deploy via browser na Vercel e no Supabase (projeto `xjhehhfhhoomblcggjpk`), ordem de migrações e checklist de smoke test.
 

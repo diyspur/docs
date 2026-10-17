@@ -57,10 +57,14 @@ Public significa que há shell/conteúdo acessível sem sessão; Authenticated s
 | `/atualizar-senha` | Shell público; ação requer sessão válida | Definir uma nova senha depois da recuperação autorizada. | [Atualizar senha](pages/atualizar-senha.md) |
 | `/termos` | Public | Consultar regras de uso, segurança da conta, propriedade intelectual e transparência de afiliados. | [Termos e convivência](pages/termos.md) |
 | `/privacidade` | Public | Explicar tratamento de dados e permitir consultar orientações de privacidade. | [Privacidade e preferências](pages/privacidade.md) |
-| `/admin` | Admin | Concentrar os caminhos de operação editorial e moderação. | [Painel administrativo](pages/admin.md) |
-| `/admin/books` | Admin | Manter os títulos e a ficha editorial do catálogo. | [Cadastro e edição editorial de livros](pages/admin-books.md) |
-| `/admin/seasons/[id]` | Admin | Editar ciclo, trechos, replay e agendamento de capítulos existentes. | [Editor de temporada e capítulos](pages/admin-season.md) |
-| `/admin/moderation` | Admin | Revisar denúncias e decidir medidas sobre conteúdo da comunidade. | [Fila de moderação](pages/admin-moderation.md) |
+| `/admin` | Admin (Repositório Independente) | Concentrar os caminhos de operação editorial e moderação. | [Painel administrativo](pages/admin.md) |
+| `/admin/books` | Admin (Repositório Independente) | Manter os títulos e a ficha editorial do catálogo. | [Cadastro e edição editorial de livros](pages/admin-books.md) |
+| `/admin/seasons/[id]` | Admin (Repositório Independente) | Editar ciclo, trechos, replay e agendamento de capítulos existentes. | [Editor de temporada e capítulos](pages/admin-season.md) |
+| `/admin/moderation` | Admin (Repositório Independente) | Revisar denúncias e decidir medidas sobre conteúdo da comunidade. | [Fila de moderação](pages/admin-moderation.md) |
+
+> [!NOTE]
+> **Desacoplamento do Console Administrativo:**  
+> As quatro rotas administrativas (`/admin`, `/admin/books`, `/admin/seasons/[id]`, `/admin/moderation`) foram desacopladas do repositório da aplicação do leitor (`diyspur/app`) e migradas com segurança para o repositório independente [diyspur/admin](https://github.com/diyspur/admin). A nova aplicação conta com auto-login seguro, menu persistente clicável e suíte de testes isolada.
 
 O entrypoint dinâmico `src/app/[memberPage]/page.tsx` é fallback para ranking/desafios/notificacoes/historico; as rotas estáticas específicas prevalecem. Ele não cria um painel adicional nem significa que qualquer nome arbitrário de página seja válido. Não foram encontradas páginas /dashboard ou /settings dedicadas.
 

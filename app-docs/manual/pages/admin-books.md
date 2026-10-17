@@ -5,10 +5,15 @@
 - **URL Path:** `/admin/books`
 - **Access Level:** Admin
 - **Core Purpose:** Manter os títulos e a ficha editorial do catálogo.
+- **Repositório:** [diyspur/admin](https://github.com/diyspur/admin) *(Desacoplado da aplicação leitor `diyspur/app`)*
+
+> [!NOTE]
+> **Migração para Repositório Dedicado:**  
+> Esta tela e suas Server Actions editoriais foram migradas para o repositório [diyspur/admin](https://github.com/diyspur/admin). A criação de livros é coberta por testes automatizados em Vitest (`admin-book-actions.test.ts`), garantindo validação de esquemas Zod e exigência estrita de HTTPS nas capas.
 
 ## 2. Prerequisites & Access
 
-Administrador e autor existente no catálogo de autores para cadastro.
+Administrador ou operador autenticado com sessão administrativa. Autores existentes no catálogo para associação.
 
 ## 3. UI Components & Layout
 
@@ -42,10 +47,12 @@ Somente bloqueio para leitor observado. Formulários e salvamento descritos por 
 
 Falhas de rede forçadas, comparação entre duas contas e matriz mobile/tablet não executadas nesta sessão. Layout responsivo foi revisado no CSS, sem certificação visual desses tamanhos. Consulte [cobertura QA](../03-qa-coverage.md).
 
-### Referência de implementação
+### Referência de implementação (Repositório `diyspur/admin`)
 
-- [src/app/admin/books/page.tsx](../../../src/app/admin/books/page.tsx)
-- [src/components/admin/admin-controls.tsx](../../../src/components/admin/admin-controls.tsx)
-- [src/app/admin/actions.ts](../../../src/app/admin/actions.ts)
+- Repositório: [github.com/diyspur/admin](https://github.com/diyspur/admin)
+- Código fonte da página: `src/app/admin/books/page.tsx`
+- Controles e formulários: `src/components/admin/admin-controls.tsx`
+- Server actions: `src/app/admin/actions.ts`
+- Testes automatizados: `tests/unit/admin-book-actions.test.ts`
 
 [Índice do manual](../00-overview.md) · [Primeiros passos](../01-getting-started.md) · [Referência técnica](../02-technical-reference.md)

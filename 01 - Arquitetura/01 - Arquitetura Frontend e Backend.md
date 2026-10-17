@@ -63,22 +63,21 @@ A persistência de sessão é gerenciada por cookies HTTP-only seguros sincroniz
 
 ---
 
-## 3. Estrutura de Diretórios do Frontend (`app`)
+## 3. Estrutura de Diretórios do Frontend do Leitor (`app`)
 
-O repositório `diyspur-cloud/app` é organizado segundo o modelo por funcionalidades (*feature-based*):
+O repositório `diyspur-cloud/app` (ou `diyspur/app`) é focado exclusivamente na experiência pública e comunitária do leitor:
 
 ```text
 app/
 ├── public/                 # Assets estáticos (ícones, logos, manifest)
 ├── src/
-│   ├── app/                # Next.js App Router (Rotas e Páginas)
+│   ├── app/                # Next.js App Router (Rotas do Leitor)
 │   │   ├── (public)/       # Rotas abertas: /, /livros, /temporadas, /termos
 │   │   ├── (auth)/         # Rotas de acesso: /entrar, /cadastro, /recuperar-senha
 │   │   ├── (reading)/      # Rotas de leitura: /capitulos/[id], /diario, /metas
 │   │   ├── (community)/    # Rotas sociais: /clubes, /comunidade, /votacao
 │   │   ├── (account)/      # Rotas do usuário: /perfil, /historico, /minha-fila
-│   │   ├── admin/          # Console administrativo restrito: /admin, /admin/books
-│   │   ├── api/            # Route Handlers técnicos (health, webhooks)
+│   │   ├── api/            # Route Handlers técnicos (health, ics, webhooks)
 │   │   ├── layout.tsx      # Layout raiz com fontes e tokens globais
 │   │   ├── error.tsx       # Error Boundary da aplicação
 │   │   └── global-error.tsx# Fallback de erro crítico de infraestrutura
@@ -91,17 +90,59 @@ app/
 │   │   ├── diary/          # CRUD e paginação de notas do diário de leitura
 │   │   ├── gamification/   # Cálculo de XP, ranking e badges
 │   │   └── profile/        # Preferências de privacidade e exportação LGPD
-│   ├── lib/                # Configuração de clientes (Supabase, Sentry, PostHog)
-│   ├── styles/             # Tokens CSS (tokens.css com variáveis Nimble)
+│   ├── lib/                # Configuração de clientes (Supabase, Sentry, PostHog, date.ts)
+│   ├── styles/             # Tokens CSS (tokens.css com variáveis Nimble e global.css)
 │   └── types/              # Definições TypeScript (database.ts gerado via CLI)
-├── tests/                  # Testes automatizados (Unitários e E2E Playwright)
+├── tests/                  # Testes automatizados (30 arquivos / 128 testes unitários + E2E)
 ├── next.config.mjs         # Configurações do Next.js (Headers de segurança, CSP)
 └── package.json            # Dependências e scripts
 ```
 
+> [!NOTE]
+> **Histórico de Arquitetura (Outubro/2026):** As rotas administrativas (`/admin`, `/admin/books`, `/admin/seasons/[id]`, `/admin/moderation`), suas Server Actions e seus controles de interface foram completamente extraídos do repositório `app` para o novo projeto dedicado `diyspur/admin`. Isso eliminou vazamento de código interno no bundle público e reduziu a superfície de ataque web.
+
 ---
 
-## 4. Estrutura de Diretórios do Backend (`db`)
+## 4. Estrutura e Arquitetura do Console Administrativo (`admin`)
+
+O repositório [`diyspur/admin`](https://github.com/diyspur/admin) abriga o console editorial e operacional do clube de leitura:
+
+```text
+admin/
+├── src/
+│   ├── app/                # Next.js App Router (Rotas Administrativas)
+│   │   ├── admin/          # Console administrativo central
+│   │   │   ├── page.tsx    # /admin (Painel Geral com atalhos de navegação)
+│   │   │   ├── actions.ts  # Server Actions administrativas auditadas
+│   │   │   ├── books/      # /admin/books (Cadastro e edição de livros)
+│   │   │   ├── seasons/    # /admin/seasons (Lista) e /admin/seasons/[id] (Editor de capítulos)
+│   │   │   └── moderation/ # /admin/moderation (Fila de denúncias comunitárias)
+│   │   ├── api/auth/       # Endpoints dedicados de autenticação
+│   │   │   ├── auto-login/ # Auto-login silencioso via cookie e credenciais admin
+│   │   │   └── create-admin# Provisionamento de conta admin no Supabase
+│   │   ├── entrar/         # Tela de login com auto-login e botão de 1 clique
+│   │   ├── layout.tsx      # Layout com barra de navegação persistente e AutoAuth
+│   │   └── page.tsx        # Redirecionamento automático para /admin
+│   ├── components/admin/   # Componentes do console:
+│   │   ├── admin-nav.tsx   # Menu clicável superior com todas as rotas ativas
+│   │   ├── admin-controls.tsx # Editores de livro, capítulo, temporada e moderação
+│   │   └── auto-auth.tsx   # Disparador cliente de auto-login
+│   ├── lib/                # Clientes Supabase SSR com suporte a bypass dev e fallback
+│   ├── styles/             # Design tokens e folhas de estilo globais (tokens.css, global.css)
+│   └── types/              # Tipagem estrita de banco (database.ts)
+├── tests/unit/             # Suíte de testes do admin (admin-book-actions, datetime-local)
+├── next.config.mjs         # Otimizações de build Turbopack
+└── package.json            # Dependências isoladas
+```
+
+### 4.1 Características de Destaque do Projeto Admin
+- **Navegação Persistente e Clicável (`AdminNav`):** Todas as rotas de operação (`/admin`, `/admin/books`, `/admin/seasons`, `/admin/moderation`) estão disponíveis no cabeçalho fixo com indicação visual de status ativo e badge de conexão.
+- **Autenticação Automática e Resiliente:** Em desenvolvimento e homologação, o middleware e a API `/api/auth/auto-login` configuram automaticamente a identidade editorial, eliminando atrito diário de login sem comprometer o RLS no servidor.
+- **Auditoria de Ações:** Todas as alterações editoriais geram registros de auditoria na tabela `editorial_audit_log` via Server Actions protegidas pela RPC `public.is_admin()`.
+
+---
+
+## 5. Estrutura de Diretórios do Backend (`db`)
 
 O repositório `diyspur-cloud/db` abriga a infraestrutura de dados como código:
 
@@ -124,7 +165,7 @@ db/
 │   │   ├── next-book-vote/ # Agregação e encerramento de votações
 │   │   └── match-readers/  # Recomendação de leitores via pgvector
 │   ├── seed.sql            # Massa de testes estruturais (MVP)
-│   └── seed_complement.sql # Catálogo editorial rico (Dom Casmurro, etc.)
+│   └── seed_complement.sql # Catálogo editorial rico (Verity, etc.)
 ├── docs/                   # Especificações técnicas, ADRs e auditorias
 └── scripts/                # Scripts de validação e testes de carga k6
 ```

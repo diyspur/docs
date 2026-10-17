@@ -5,10 +5,15 @@
 - **URL Path:** `/admin/moderation`
 - **Access Level:** Admin
 - **Core Purpose:** Revisar denúncias e decidir medidas sobre conteúdo da comunidade.
+- **Repositório:** [diyspur/admin](https://github.com/diyspur/admin) *(Desacoplado da aplicação leitor `diyspur/app`)*
+
+> [!NOTE]
+> **Migração para Repositório Dedicado:**  
+> Esta tela agora é mantida no repositório [diyspur/admin](https://github.com/diyspur/admin). As ações de resolução, dispensa e ocultação de conteúdo reportado são executadas de forma isolada com auditoria.
 
 ## 2. Prerequisites & Access
 
-Administrador e denúncia pendente para fila preenchida.
+Administrador ou operador autenticado com sessão administrativa. Fila de denúncias consultada em `content_reports`.
 
 ## 3. UI Components & Layout
 
@@ -42,10 +47,11 @@ Somente bloqueio de acesso ao leitor observado; nenhuma denúncia criada ou revi
 
 Falhas de rede forçadas, comparação entre duas contas e matriz mobile/tablet não executadas nesta sessão. Layout responsivo foi revisado no CSS, sem certificação visual desses tamanhos. Consulte [cobertura QA](../03-qa-coverage.md).
 
-### Referência de implementação
+### Referência de implementação (Repositório `diyspur/admin`)
 
-- [src/app/admin/moderation/page.tsx](../../../src/app/admin/moderation/page.tsx)
-- [src/components/admin/admin-controls.tsx](../../../src/components/admin/admin-controls.tsx)
-- [src/app/admin/actions.ts](../../../src/app/admin/actions.ts)
+- Repositório: [github.com/diyspur/admin](https://github.com/diyspur/admin)
+- Código fonte da página: `src/app/admin/moderation/page.tsx`
+- Controles e formulários: `src/components/admin/admin-controls.tsx`
+- Server actions: `src/app/admin/actions.ts`
 
 [Índice do manual](../00-overview.md) · [Primeiros passos](../01-getting-started.md) · [Referência técnica](../02-technical-reference.md)
