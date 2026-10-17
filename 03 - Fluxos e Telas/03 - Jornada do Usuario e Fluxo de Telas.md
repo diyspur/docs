@@ -1,161 +1,145 @@
 # 03 — Jornada do Usuário & Fluxo de Telas
 
-> **Documento:** Engenharia de Telas, Transições de Estado e Interações do Usuário  
+> **Documento:** Engenharia de Telas, Transições de Estado, Interações do Usuário e Design Nimble  
 > **MOC Principal:** [[DIYSpur - Master Index]]  
-> **Tags:** `#ux` `#user-journey` `#telas` `#frontend` `#nextjs`
+> **Tags:** `#ux` `#user-journey` `#telas` `#frontend` `#nextjs` `#design-nimble`
 
 ---
 
 ## 1. Fluxo Geral de Navegação da Aplicação
 
-O ecossistema DIYSpur possui uma navegação fluida que guia o leitor da descoberta inicial até a rotina regular de leitura:
+O ecossistema DIYSpur possui uma malha de navegação interconectada que orienta o leitor através de rotas intuitivas sem caminhos sem saída (*dead ends*):
 
 ```mermaid
 flowchart TD
     HOME["/ (Home)"] --> LIVROS["/livros (Catálogo)"]
     HOME --> TEMP["/temporadas/[slug] (Cronograma)"]
+    HOME --> CALENDARIO["/calendario (Encontros Gerais)"]
+    HOME --> RANKING["/ranking (Rankings de XP & Livros)"]
+    HOME --> NOTIF["/notificacoes (Central de Alertas)"]
+    
     LIVROS --> LIVRO_DET["/livros/[slug] (Ficha da Obra)"]
+    LIVRO_DET -->|Controle de Leitura| ESTANTE["Estante Canônica (/historico)"]
+    LIVRO_DET -->|Grupo Oficial| CLUBE_DET["/clubes/[slug] (Painel do Clube)"]
     LIVRO_DET --> TEMP
     
     TEMP --> CAP["/capitulos/[id] (Segunda Tela)"]
+    CAP -->|Pílula de Debate| CHAT["/clubes/[slug]/canais/[channelSlug]"]
+    CAP -->|Encontro do Capítulo| EVENTO["/eventos/[id] (Detalhes do Evento)"]
     
-    subgraph ExperienciaCapitulo ["Segunda Tela do Capítulo"]
-        CAP --> VIDEO["Player YouTube (Sob Demanda)"]
-        CAP --> TIMED_COMM["Comentários Sincronizados"]
-        CAP --> QUIZ["Quiz Pedagógico (Server-Side)"]
-        CAP --> PROGRESS["Registro de Progresso"]
+    CLUBE_DET --> CHAT
+    CLUBE_DET --> CLUBE_CONF["/clubes/[slug]/configuracoes"]
+    CLUBE_DET --> CLUBE_NOVO_EVT["/clubes/[slug]/eventos/novo"]
+    CLUBE_NOVO_EVT --> EVENTO
+    CALENDARIO --> EVENTO
+    
+    subgraph EspacoPessoal ["Espaço do Leitor Autenticado"]
+        PERFIL["/perfil"]
+        HISTORICO["/historico"]
+        DIARIO["/diario"]
+        METAS["/metas"]
+        FILA["/minha-fila"]
     end
     
-    PROGRESS --> CAP_NEXT["Próximo Capítulo Liberado"]
-    QUIZ --> XP["Atribuição de XP e Streak"]
-    
-    HOME --> COMUNIDADE["/comunidade (Feed de Debates)"]
-    HOME --> CLUBES["/clubes (Clubes de Usuários)"]
-    CLUBES --> CLUBE_NOVO["/clubes/novo (Criar Clube)"]
-    CLUBES --> CLUBE_DET["/clubes/[slug] (Painel do Clube)"]
-    
-    HOME --> CALENDARIO["/calendario (Encontros & RSVP)"]
-    HOME --> VOTACAO["/votacao (Escolha da Próxima Obra)"]
-    
-    subgraph EspacoPessoal ["Área Pessoal Autenticada"]
-        PERFIL["/perfil (Meu Espaço)"]
-        HISTORICO["/historico (Capítulos & Quizzes)"]
-        DIARIO["/diario (Notas Privadas)"]
-        LISTAS["/listas (Listas de Leitura)"]
-        METAS["/metas (Metas Anuais)"]
-        FILA["/minha-fila (Top 5 Próximos)"]
+    subgraph ConsoleAdmin ["Console Administrativo (/admin)"]
+        ADMIN_BOOKS["/admin/books"]
+        ADMIN_SEASONS["/admin/seasons/[id]"]
+        ADMIN_MOD["/admin/moderation"]
     end
 ```
 
 ---
 
-## 2. Detalhamento Passo a Passo das Telas
+## 2. Detalhamento Tela a Tela
 
 ### 2.1 Página Inicial / Landing (`/`)
-- **Propósito:** Apresentar a proposta do clube, exibir a leitura coletiva atual e direcionar o leitor sem atrito.
-- **Nível de Acesso:** Público.
-- **Componentes Principais:**
-  - Header com atalhos de navegação (*Explorar*, *Comunidade*, *Entrar* / *Meu Espaço*).
-  - Hero com proposta de valor ("A segunda tela do seu livro").
-  - Card da temporada ativa com capa da obra, autor, anfitrião e botão "Começar a ler junto".
-  - Demonstração interativa da segunda tela (prévia do vídeo, quiz e comentários).
-  - Agenda dos próximos encontros virtuais com botão de exportação.
-  - Seção de depoimentos e rodapé com links institucionais e preferências de privacidade.
-- **Transição:** O botão "Começar a ler junto" rola a tela até a âncora da temporada ativa, de onde o usuário clica para abrir `/temporadas/[slug]`.
+- **Propósito:** Apresentar a proposta de segunda tela, destacar a leitura coletiva ativa e fornecer chamadas para ação (CTA) claras.
+- **Componentes Nimble:** Hero com alto contraste, card da temporada ativa com capas com aspect-ratio preservado, agenda de encontros próximos e depoimentos de membros.
+- **Touch Targets:** Botões principais com altura mínima de $48\text{px}$ e padding ergonômico.
 
 ---
 
-### 2.2 Ficha do Livro & Catálogo (`/livros` e `/livros/[slug]`)
-- **Propósito:** Permitir a descoberta de títulos no catálogo e fornecer a ficha técnica completa da edição.
-- **Nível de Acesso:** Público.
-- **Regras & Interações:**
-  - Busca instantânea com *debounce* de 300ms prevenindo requisições desnecessárias.
-  - A ficha da obra exibe sinopse, dados da edição (ISBN, número de páginas, editora recomendada) e **Avisos de Conteúdo** (*content warnings*) explícitos para garantir uma leitura confortável.
-  - Botão de compra afiliada: redirecionamento transparente para a Amazon com tag oficial do clube.
-  - Histórico de temporadas em que o livro já foi lido e botão "Adicionar à Minha Fila".
+### 2.2 Catálogo & Ficha da Obra (`/livros` e `/livros/[slug]`)
+- **Propósito:** Descoberta de títulos e engajamento direto com a obra.
+- **Recursos Integrados:**
+  - **`BookReadingControl`:** Seletor de status canônico (`Quero Ler`, `Lendo`, `Lido`), seleção da edição específica (`book_edition_id`) e controle de página atual com cálculo instantâneo de percentual.
+  - **`BookReadingStats`:** Contadores comunitários de leitores ativos, concluídos e ritmo coletivo de leitura.
+  - **`BookCommunityPanel`:** Atalho direto para o Clube Oficial da obra (`official_book_groups`) e avisos de conteúdo (*content warnings*).
 
 ---
 
-### 2.3 Cronograma da Temporada (`/temporadas/[slug]`)
-- **Propósito:** Apresentar o plano de leitura estruturado semana a semana.
-- **Nível de Acesso:** Público com liberação progressiva.
-- **Regras & Interações:**
-  - Lista de capítulos organizados por semana com indicação de páginas a serem lidas no exemplar físico/digital.
-  - Indicador de status por capítulo: *Liberado*, *Bloqueado por Data* ou *Concluído* (para usuários logados).
-  - Acesso direto ao primeiro capítulo ativo.
+### 2.3 Segunda Tela do Capítulo (`/capitulos/[id]`)
+- **Propósito:** Acompanhamento interativo do trecho da semana.
+- **Componentes:**
+  1. **`YouTubeFacade`:** Embed sob demanda que não consome dados até a interação do leitor, suportando salto temporal direto via parâmetro `?t=`.
+  2. **`DiscussionEntryButton`:** Pílula contextual que guia o leitor diretamente para o canal de discussão correspondente ao capítulo.
+  3. **Comentários Sincronizados:** Linha do tempo de comentários atrelados a segundos específicos do vídeo.
+  4. **Quiz do Capítulo:** Perguntas de fixação pedagógica com correção segura no servidor.
 
 ---
 
-### 2.4 Segunda Tela do Capítulo (`/capitulos/[id]`) — *O Núcleo da Aplicação*
-- **Propósito:** Acompanhar uma etapa de leitura com suporte multimídia, debate e fixação pedagógica.
-- **Nível de Acesso:** Leitura pública / Ações exigem autenticação.
-- **Componentes e Dinâmica:**
-  1. **Player de Vídeo YouTube:** Não inicia automaticamente. O leitor clica em "Assistir vídeo" para carregar o player sob demanda, economizando dados e banda.
-  2. **Comentários Sincronizados:** O leitor pode pausar o vídeo e publicar uma reflexão associada ao segundo exato da reprodução (ex.: segundo 150 = 2m30s).
-  3. **Proteção Anti-Spoiler:**
-     - Comentários sinalizados com a flag de spoiler aparecem com o texto borrado/mascarado.
-     - Botão "Revelar comentário" permite que o leitor destrave a leitura caso deseje.
-  4. **Controle de Progresso:** Seletor de percentual lido. Ao clicar em "Concluir capítulo", o sistema grava 100% no banco de dados e impede regressão acidental.
-  5. **Quiz do Capítulo:** 
-     - Exibe 3 a 5 perguntas elaboradas pela equipe editorial.
-     - O botão de envio permanece desabilitado até que todas as questões sejam respondidas.
-     - A correção ocorre exclusivamente no servidor via Edge Function, devolvendo o score e concedendo os pontos de XP correspondentes.
-  6. **Navegação de Encerramento:** Card que felicita a conclusão e oferece link direto para o próximo capítulo liberado.
+### 2.4 Clubes & Canais de Discussão (`/clubes`, `/clubes/[slug]`, `/clubes/[slug]/canais/[channelSlug]`)
+- **Propósito:** Espaço de diálogo comunitário e socialização literária.
+- **Dinâmica do Workspace de Chat:**
+  - **`ChannelDirectory`:** Navegação lateral entre `#geral`, `#spoilers` e `#capitulos`.
+  - **`SpoilerConsent`:** Barreira modal para canais com spoiler, exigindo aceite registrado no banco.
+  - **`ChannelChat`:** Feed de mensagens em tempo real com auto-scroll inteligente, suporte a respostas encadeadas (`reply`), bolhas de spoiler com blur e composer com atalho `Cmd/Ctrl + Enter`.
 
 ---
 
-### 2.5 Calendário e Presença (`/calendario`)
-- **Propósito:** Divulgar as datas dos encontros semanais ao vivo de discussão.
-- **Nível de Acesso:** Público para visualização; confirmação de presença (RSVP) requer login.
+### 2.5 Calendário & Eventos (`/calendario`, `/eventos/[id]`, `/clubes/[slug]/eventos/novo`)
+- **Propósito:** Agendamento e participação em debates virtuais ou presenciais.
+- **Recursos:**
+  - Cards com badges de livro e clube associados.
+  - Página `/eventos/[id]` com marcação rica Schema.org Event (`JsonLd`).
+  - Confirmação de presença em tempo real (RSVP).
+  - Botão "Adicionar ao Google Agenda" e download de arquivo `.ics` rigorosamente compatível com a **RFC 5545**.
+
+---
+
+### 2.6 Ranking Comunitário (`/ranking`)
+- **Propósito:** Reconhecimento e estímulo ao hábito de leitura.
+- **Arquitetura de Abas via URL Query:**
+  - `?tipo=xp`: Ranking da temporada com pontuação de quizzes e metas cumpridas.
+  - `?tipo=livros`: Ranking dos livros mais lidos pela comunidade.
+
+---
+
+### 2.7 Estante do Leitor no Histórico (`/historico`)
+- **Propósito:** Centralizar a vida literária do leitor.
+- **Estrutura:** Abas com filtros por status de leitura (*Lendo*, *Quero Ler*, *Lidos*, *Pausados*) com acesso rápido à atualização de progresso e resenhas.
+
+---
+
+### 2.8 Central de Notificações (`/notificacoes`)
+- **Propósito:** Gerenciamento unificado de alertas e avisos da comunidade.
 - **Funcionalidades:**
-  - Visualização cronológica com links de transmissão (YouTube Live / Google Meet).
-  - Botão "Adicionar ao Google Agenda".
-  - Download de arquivo `.ics` para integração com Apple Calendar e Outlook.
+  - Popover rápido no header (`NotificationCenter`) + página completa paginada.
+  - Filtros por canal (`discussions`, `editorial`, `events`, `gamification`).
+  - Ação em lote: "Marcar todas como lidas".
+  - Configuração de canais ativos e horários silenciosos.
 
 ---
 
-### 2.6 Votação da Próxima Leitura (`/votacao`)
-- **Propósito:** Permitir que a comunidade decida democraticamente a obra da temporada seguinte.
-- **Nível de Acesso:** Requer autenticação para votar; resultados públicos após o encerramento.
-- **Regras:**
-  - Cada leitor tem direito a 1 voto por enquete ativa.
-  - A apuração dos votos é agregada pelo PostgreSQL sem expor o voto individual de cada participante.
+### 2.9 Console Administrativo & Moderação (`/admin/**`)
+- **Propósito:** Operação editorial e governança de comunidade.
+- **Telas:**
+  - `/admin/books`: Catálogo com upload de capas via HTTPS obrigatório.
+  - `/admin/seasons/[id]`: Gestão de capítulos e cronograma.
+  - `/admin/moderation`: Fila de denúncias comunitárias com ações imediatas de ocultar conteúdo, resolver ou dispensar.
 
 ---
 
-### 2.7 Gestão de Clubes de Leitores (`/clubes`, `/clubes/novo`, `/clubes/[slug]`)
-- **Propósito:** Permitir que usuários criem seus próprios clubes de leitura independentes.
-- **Nível de Acesso:** 
-  - Listagem de clubes públicos: aberta a todos.
-  - Criação de clube: usuários autenticados.
-  - Ficha e fórum de clube privado: restrito a membros autorizados por convite.
-- **Regras de Autoridade:**
-  - O criador é o `owner` definitivo.
-  - Convites para outros membros são enviados por `@username`.
+## 3. Padrões de Acessibilidade & Usabilidade Nimble
+
+- **Áreas Táteis $\ge 48\text{px}$:** Aplicadas em botões, links, seletores de abas e ícones.
+- **Marco Único `<main id="main-content">`:** Garantido em todas as páginas para navegação acessível.
+- **Feedback Auditivo:** Regiões dinâmicas utilizam `aria-live="polite"` para leitores de tela.
+- **Tratamento de Estados:** Todas as telas possuem estados de carregamento (*skeleton loaders*), estados vazios com ilustrações semânticas e mensagens claras de erro.
 
 ---
 
-### 2.8 Espaço Pessoal do Leitor (`/perfil`, `/diario`, `/metas`, `/minha-fila`)
-- **Propósito:** Centralizar a vida literária do leitor e promover a retenção a longo prazo.
-- **Sub-telas:**
-  - **`/perfil`:** Resumo de medalhas conquistadas, nível de leitor, total de XP, capítulos lidos e atalho para exportação LGPD.
-  - **`/diario`:** Diário íntimo com notas de leitura privadas (`owner_only`), anotação de páginas e minutos investidos.
-  - **`/metas`:** Metas anuais (ex.: ler 24 livros no ano) com barra de progresso em tempo real baseada nos capítulos e livros finalizados.
-  - **`/minha-fila`:** Lista estrita com os próximos 5 livros da fila de prioridade de leitura.
-
----
-
-### 2.9 Console Administrativo (`/admin/**`)
-- **Propósito:** Operação editorial, moderação de comentários e gestão de catálogo.
-- **Nível de Acesso:** Estritamente restrito a usuários com `role = 'admin'`.
-- **Módulos:**
-  - `/admin/books`: Cadastro e edição de títulos e metadados.
-  - `/admin/seasons`: Configuração de novas temporadas, datas e uploads de capas.
-  - `/admin/moderation`: Fila de denúncias de comentários com ações de manter ou remover.
-
----
-
-## 3. Navegação Relacionada
-- Consultar o modelo de dados que suporta essas telas: [[01.1 - Modelo de Dados e Seguranca RLS]]
-- Verificar a estratégia de conteúdo multimídia: [[04 - Estrategia de Conteudo e Redes Sociais]]
+## 4. Navegação Relacionada
+- Consultar os componentes e tokens de design: [[06.3 - Dicionario de Telas, Componentes e Design Tokens Nimble]]
+- Conhecer a arquitetura dos canais de discussão: [[02.4 - Comunidade de Leitura, Clubes e Canais de Discussao]]
 - Voltar ao MOC central: [[DIYSpur - Master Index]]
