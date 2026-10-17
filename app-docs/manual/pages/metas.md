@@ -4,7 +4,7 @@
 
 - **URL Path:** `/metas`
 - **Access Level:** Authenticated
-- **Core Purpose:** Definir objetivos de livros, páginas e tempo e comparar com a leitura registrada.
+- **Core Purpose:** Definir múltiplos objetivos personalizados de leitura (livros, páginas e tempo) e acompanhar o progresso (Excalidraw B16: *"o usuário pode ter mais de uma meta"*).
 
 ## 2. Prerequisites & Access
 
@@ -29,14 +29,14 @@ Ano; campos de livros, páginas e minutos; Salvar meta; três indicadores de pro
 ## 4. Step-by-Step User Flow
 
 1. **Step 1:** Abra **Metas do ano** na área pessoal e confira o ano mostrado.
-2. **Step 2:** Informe uma ou mais metas. Campos vazios correspondem a ausência de meta para a dimensão.
-3. **Step 3:** Use **Salvar meta** e aguarde Meta de leitura salva com sucesso!.
+2. **Step 2:** Informe uma ou mais metas. O leitor pode manter múltiplos planos ativos em paralelo.
+3. **Step 3:** Use **Salvar meta** e aguarde confirmação de persistência.
 4. **Step 4:** Registre sessões no diário e conclua suas leituras; retorne para acompanhar progresso.
-5. **Step 5:** Para ajustar a meta, altere o número e salve. A operação atualiza a meta do mesmo usuário e ano.
+5. **Step 5:** Para ajustar a meta, altere o número e salve.
 
 ### Interação com o backend
 
-setReadingGoal faz upsert em reading_goals com conflito user_id,year. getUserReadingGoal consulta reading_goal_progress por goal_id. Dados são calculados no backend; formulário não permite escrever progresso diretamente.
+A migração `20261018000500_multiple_personal_reading_goals.sql` removeu o limite de unicidade estrita por ano em `reading_goals` e adicionou `title`, `version` e `archived_at`, viabilizando múltiplas metas simultâneas por usuário com histórico. `getUserReadingGoal` consulta `reading_goal_progress` por `goal_id`.
 
 Os passos de salvamento acima descrevem o contrato implementado. Confirme a mensagem de sucesso antes de considerar uma operação persistida; sua execução nesta rodada está indicada abaixo.
 

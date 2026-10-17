@@ -32,7 +32,8 @@ Policies existentes e funções SECURITY DEFINER exigem revisão independente; c
 | [src/app/notificacoes/queries.ts](../../src/app/notificacoes/queries.ts) | `notifications`, `user_club_invitations` |
 | [src/app/sitemap.ts](../../src/app/sitemap.ts) | `books`, `seasons`, `chapters` |
 | [src/features/catalog/queries.ts](../../src/features/catalog/queries.ts) | `books`, `authors`, `seasons`, `book_content_warnings`, `reading_lists`, `chapters`, `get_season_chapter_access`, `milestones`, `get_user_milestone_status`, `meetings`, `get_chapter_access`, `v_comments_visible`, `user_progress`, `v_quiz_questions_public`, `host_prompts`, `v_host_prompt_results`, `host_prompt_votes` |
-| [src/features/chapters/actions.ts](../../src/features/chapters/actions.ts) | `award-xp`, `chapters`, `seasons`, `comments`, `get_own_chapter_comment_for_edit`, `remove_own_chapter_comment`, `user_progress`, `quiz-validate` |
+| [src/features/chapters/actions.ts](../../src/features/chapters/actions.ts) | `award-xp`, `chapters`, `seasons`, `comments`, `get_own_chapter_comment_for_edit`, `remove_own_chapter_comment`, `user_progress`, `quiz-validate`, `createChapterComment`, `editChapterComment`, `deleteChapterComment`, `getOwnChapterCommentForEdit` |
+| [src/features/chapters/schemas.ts](../../src/features/chapters/schemas.ts) | Validação Zod de comentários em capítulos (`commentSchema`: body min 2 max 2000, chapterId uuid) |
 | [src/features/clubs/actions.ts](../../src/features/clubs/actions.ts) | `create_user_club`, `join_user_club`, `leave_user_club`, `update_user_club`, `invite_user_to_club`, `v_profiles_public`, `revoke_club_invitation`, `accept_club_invitation`, `remove_club_member` |
 | [src/features/clubs/queries.ts](../../src/features/clubs/queries.ts) | `user_clubs`, `user_club_members` |
 | [src/features/goals/actions.ts](../../src/features/goals/actions.ts) | `reading_goals` |
@@ -49,8 +50,8 @@ Policies existentes e funções SECURITY DEFINER exigem revisão independente; c
 | [src/features/profile/queries.ts](../../src/features/profile/queries.ts) | `user_achievements`, `achievements`, `user_progress`, `chapters`, `seasons`, `books`, `quiz_attempts`, `profiles`, `v_user_reading_overview`, `user_xp`, `user_streaks`, `user_quiz_averages` |
 | [src/features/up-next/actions.ts](../../src/features/up-next/actions.ts) | `add_to_up_next_atomic`, `user_up_next` |
 | [src/features/up-next/queries.ts](../../src/features/up-next/queries.ts) | `user_up_next` |
-| [src/features/video-comments/actions.ts](../../src/features/video-comments/actions.ts) | `chapters`, `seasons`, `video_timed_comments` |
-| [src/features/video-comments/queries.ts](../../src/features/video-comments/queries.ts) | `get_visible_video_timed_comments`, `v_video_timed_comment_stats` |
+| [src/features/discussions/actions.ts](../../src/features/discussions/actions.ts) | `openOfficialBookGroupAction`, `openChapterDiscussionAction`, `postClubMessageAction`, `setSpoilerConsentAction`, `toggleReactionAction`, `club_channels`, `club_messages` |
+| [src/features/rankings/queries.ts](../../src/features/rankings/queries.ts) | `v_season_ranking`, `v_book_reading_stats`, `private.mv_book_reading_stats_v2` |
 
 Essa tabela é um inventário de referências no código, não uma prova de execução de todas as chamadas. Componentes podem depender de conteúdo ausente e endpoints podem existir sem controle navegável.
 
@@ -116,3 +117,16 @@ Trata-se de trecho explicativo do predicado, não de SQL para aplicar isoladamen
 ### Evidência de exportação iCalendar
 
 O download no navegador retornou arquivo de 468 bytes com VCALENDAR/VEVENT, DTSTART 20261014T230000Z, DTEND 20261015T000000Z e 16 CRLF reais. Isso confirma exportação do evento auditado, sem confirmar importação por Google/Apple/Outlook. Nenhum compromisso externo foi criado.
+
+## Camada de Design System e Componentes Base UI (`src/components/ui/`)
+
+A interface foi padronizada sob uma arquitetura de componentes reutilizáveis e desacoplados, consumindo o Design System baseado em variáveis CSS atômicas declaradas em `src/styles/tokens.css` e classes utilitárias no Tailwind:
+
+| Componente | Arquivo | Responsabilidade Técnica | Contratos de Props |
+|---|---|---|---|
+| `GlassCard` | `src/components/ui/glass-card.tsx` | Contêiner polimórfico (`as`, default `div`) com efeito de vidro translúcido (`backdrop-blur-md`), bordas reativas e brilho especular. | `as?: ElementType`, `variant?: 'default' \| 'interactive' \| 'ghost'`, `glow?: boolean`, `children`, `className` |
+| `CyberButton` | `src/components/ui/cyber-button.tsx` | Botão tátil futurista com micro-interação GPU (`active:scale-[0.98]`), foco com anel neon e alto contraste WCAG AAA. | `variant?: 'primary' \| 'secondary' \| 'ghost' \| 'danger'`, `size?: 'sm' \| 'md' \| 'lg' \| 'icon'`, `glow?: boolean`, `asChild?: boolean`, `disabled`, `className` |
+| `CyberSkeleton` | `src/components/ui/cyber-skeleton.tsx` | Skeleton loader sem salto de layout (CLS = 0.000) com animação `shimmer` em gradiente angular de 60fps. | `variant?: 'text' \| 'circular' \| 'rectangular' \| 'card'`, `width?: string \| number`, `height?: string \| number`, `glow?: boolean`, `className` |
+| `BookCard` | `src/components/books/book-card.tsx` | Card de catálogo/estante com hover especular, badges de estado de leitura e imagem otimizada via Next/Image. | `book: BookCatalogItem`, `priority?: boolean`, `showReadingStatus?: boolean` |
+| `SiteHeader` | `src/components/layout/site-header.tsx` | Header global fixo com frosted glass (`backdrop-blur-md`), navegação semântica ARIA e menu mobile responsivo. | `currentUser?: SessionUser \| null`, `notificationsCount?: number` |
+

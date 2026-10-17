@@ -1,9 +1,9 @@
 # DIYSpur — Hub de Documentação Técnica e Arquitetural (MOC)
 
 > **Projeto:** DIYSpur (Reading Club & Second Screen Platform)  
-> **Status:** Produção / Staging / Homologado v1.0  
+> **Status:** Produção / Staging / Homologado v1.1 (Fluxo Excalidraw 34 Blocos & 41 Setas, Comunidade Canônica Unificada)  
 > **Repositórios:** [Frontend & Leitor](https://github.com/diyspur-cloud/app) | [Console Administrativo & Editorial](https://github.com/diyspur/admin) | [Backend & Database](https://github.com/diyspur-cloud/db) | [Documentação](https://github.com/diyspur/docs)  
-> **Data de Consolidação:** Outubro de 2026 (Refatoração de Desacoplamento do Console Admin)  
+> **Data de Consolidação:** Outubro de 2026 (Unificação Canônica de Clubes e Limpeza de Banco)  
 > **Padrão de Documentação:** Obsidian Markdown com Links Bidirecionais (`[[...]]`)
 
 ---
@@ -71,10 +71,10 @@ graph TD
 - **[[00 - Visao Geral do Projeto]]**: O conceito de *segunda tela* literária, o ecossistema omnicanal (Web + YouTube + TikTok + Instagram), governança de produto e Mobile-First.
 
 ### Bloco 01: Arquitetura, Dados e Engenharia de Sistemas
-- **[[01 - Arquitetura Frontend e Backend]]**: Arquitetura desacoplada em múltiplos frontends: **`app`** (experiência do leitor) e **`admin`** (console administrativo & editorial dedicado), Next.js 16 (App Router / Turbopack), React 19, TypeScript, Supabase SSR e Vercel.
+- **[[01 - Arquitetura Frontend e Backend]]**: Arquitetura desacoplada em múltiplos frontends: **`app`** (experiência do leitor com Design Engine Next-Gen, Glassmorphism e compensação OLED) e **`admin`** (console administrativo & editorial dedicado), Next.js 16 (App Router / Turbopack), React 19, TypeScript, Supabase SSR e Vercel.
 - **[[01.1 - Modelo de Dados e Seguranca RLS]]**: 82 tabelas relacionais, 12 migrações incrementais M01–M12, invariantes RLS e views anti-spoiler.
 - **[[01.2 - Inteligencia Artificial e Recomendacao Semantica]]**: Extensão `pgvector`, embeddings em 1536 dimensões, matching de leitores (*Reader Match*) e similaridade de cosseno.
-- **[[01.3 - Engenharia de Performance e Seguranca Avancada]]**: Otimização com RLS InitPlans `(SELECT auth.uid())`, concorrência otimista com `version`, e matriz de segurança das 11 Edge Functions Deno.
+- **[[01.3 - Engenharia de Performance e Seguranca Avancada]]**: Otimização com RLS InitPlans `(SELECT auth.uid())`, concorrência otimista com `version`, aceleração por GPU (60fps P99), eficiência energética OLED e matriz de segurança das 11 Edge Functions Deno.
 - **[[01.4 - Arquitetura Realtime, CDC e Mensageria]]**: Change Data Capture (CDC), WebSockets e canais de atualização instantânea para chats, reações e votações ao vivo.
 - **[[01.5 - Governanca LGPD, Event Sourcing e Retencao de Dados]]**: Ciclo de vida de dados, exclusão física vs anonimização de comentários, sucessão de clubes comunitários, event sourcing no Stripe e auditoria de afiliados com hash de IP.
 - **[[01.6 - Observabilidade, Seguranca Web e Dicionario de Telemetria]]**: Contrato tipado de eventos PostHog (`ProductEventMap`), logs estruturados JSON, Content Security Policy restritivo, mitigação de Open Redirects e Schema.org RFC 5545.
@@ -90,21 +90,21 @@ graph TD
 - **[[02.6 - Central de Notificacoes, Outbox e Eventos de Calendario]]**: 15 tipos de notificação, popover e página `/notificacoes`, fila assíncrona outbox com worker Deno, agendamento de encontros, integração Google Agenda e exportação `.ics` RFC 5545.
 
 ### Bloco 03: Experiência e Jornada do Leitor
-- **[[03 - Jornada do Usuario e Fluxo de Telas]]**: Decomposição tela a tela (da Landing até o Player multimídia com chat sincronizado por segundos, Quizzes, Clubes e Calendário).
+- **[[03 - Jornada do Usuario e Fluxo de Telas]]**: Decomposição tela a tela (da Landing com Hero futurista e Radar ativo até o Player multimídia com chat sincronizado por segundos, Quizzes, Clubes e Calendário).
 
 ### Bloco 04: Estratégia de Conteúdo e Growth Loops
 - **[[04 - Estrategia de Conteudo e Redes Sociais]]**: Alinhamento com YouTube (long-form/lives com timestamps no banco), TikTok (cortes rápidos e quizzes) e Instagram (avisos de conteúdo e enquetes).
 - **[[04.1 - Motor de Compartilhamento Social e Viral Loops]]**: Renderização assíncrona de cartões visuais para Instagram Stories e TikTok (`social_render_jobs`), Web Share API nativa e flywheel orgânico de UGC.
 
 ### Bloco 05: Qualidade, QA e Operação
-- **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suítes de testes automatizados: 30 arquivos e 128 testes unitários no `app`, 2 arquivos e 7 testes no `admin`, cobertura de build Next.js e bateria PGlite de testes de banco.
+- **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suítes de testes automatizados: 31 arquivos e 132 testes unitários no `app`, 2 arquivos e 7 testes no `admin`, cobertura de build Next.js Turbopack e bateria PGlite de testes de banco.
 - **[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]**: Procedimentos de release, boas práticas de migrações aditivas, configuração de crons e resposta a incidentes.
 - **[[05.3 - Guia Completo de Deploy Vercel e Supabase]]**: Procedimento Operacional Padrão (SOP) para deploy via browser na Vercel e no Supabase (projeto `xjhehhfhhoomblcggjpk`), ordem de migrações e checklist de smoke test.
 
 ### Bloco 06: Referência Técnica e APIs
 - **[[06.1 - Catalogo Completo de RPCs e Triggers PostgreSQL]]**: Especificação de todas as Stored Procedures, parâmetros, permissões, contexto de segurança e triggers de integridade.
 - **[[06.2 - Contrato de APIs HTTP, Edge Functions e Webhooks]]**: Contrato das rotas de API do Next.js App Router e das 11 Edge Functions do Supabase.
-- **[[06.3 - Dicionario de Telas, Componentes e Design Tokens Nimble]]**: Catálogo de componentes de interface, design tokens semânticos, acessibilidade WCAG 2.2 e áreas de toque $\ge 48\text{px}$.
+- **[[06.3 - Dicionario de Telas, Componentes e Design Tokens Nimble]]**: Catálogo de componentes (`GlassCard`, `CyberButton`, `CyberSkeleton`), design tokens semânticos, iluminação especular, compensação ótica OLED, modos de densidade/acessibilidade e áreas de toque $\ge 48\text{px}$.
 
 ---
 

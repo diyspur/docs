@@ -86,22 +86,25 @@ Experiência interativa do leitor enquanto progride no livro:
 | **Transição com Trava Anti-Fraude** | Gatilho `trg_validate_book_reading_transition` que impede saltos diretos para `read` sem passar por `reading`. | ✅ **Homologado & Ativo** |
 | **Metadados de Edição** | Associação com `book_editions` (ISBN, editora, total de páginas) com cálculo dinâmico de percentual lido. | ✅ **Homologado & Ativo** |
 | **Quiz e Tentativas** | Execução de quizzes com validação de gabarito no servidor via Edge Function, pontuação percentual e rate-limiting. | ✅ **Homologado & Ativo** |
-| **XP e Ranking Duplo** | Rota `/ranking` com abas para XP da Temporada (`?tipo=xp`) e Livros Mais Lidos da Comunidade (`?tipo=livros`). | ✅ **Homologado & Ativo** |
-| **Estante no Histórico** | Rota `/historico` com filtros de estante (*Lendo*, *Quero Ler*, *Lidos*) e touch targets táteis $\ge 48\text{px}$. | ✅ **Homologado & Ativo** |
-| **Diário Privado** | Notas de leitura com privacidade estrita (`owner_only`), contadores de páginas e minutos lidos. | ✅ **Homologado & Ativo** |
-| **Metas Anuais e Minha Fila** | Metas anuais com barra de progresso em tempo real e priorização dos Top 5 próximos livros. | ✅ **Homologado & Ativo** |
+| **XP e Ranking Duplo** | Rota `/ranking` (XP de temporada com 5 regras explícitas: capítulos, comentários, quiz, streak, encontros) e `/ranking/livros` (4 abas: Mais Lidos, Lendo Agora, Concluídos, Desistências com `dnf_rate`). | ✅ **Homologado & Ativo** |
+| **Estante no Histórico** | Rota `/historico` sincronizada com `user_book_readings` e progresso de capítulos, com filtros (*Lendo*, *Quero Ler*, *Lidos*) e touch targets $\ge 48\text{px}$. | ✅ **Homologado & Ativo** |
+| **Diário de Bordo Livre** | Caderno aberto para anotações e pensamentos sobre obras (páginas e minutos lidos opcionais, B15), com privacidade estrita (`owner_only`). | ✅ **Homologado & Ativo** |
+| **Múltiplas Metas Pessoais & Fila** | Suporte a múltiplas metas de leitura simultâneas por usuário (B16) e gestão de priorização dos Top 5 próximos livros com link para `/listas` (F41). | ✅ **Homologado & Ativo** |
+| **Leituras Compartilhadas** | Espaço para convidar amigos para ler a mesma obra (B17) com suporte a `?livro=[slug]` e redirecionamentos para `/notificacoes`. | ✅ **Homologado & Ativo** |
 
 ---
 
 ### Coluna 5: Comunidade, Discussões e Eventos
 
-Socialização protegida e espaços comunitários:
+Socialização protegida e espaços comunitários centrados na obra:
 
 | Funcionalidade | Descrição Técnica & Escopo | Status |
 |---|---|:---:|
-| **Clubes Oficiais do Livro** | Tabela `official_book_groups` auto-criada ao cadastrar obras, vinculando clubes e canais temáticos aos livros. | ✅ **Homologado & Ativo** |
-| **Clubes Independentes** | Criação de clubes públicos e privados (`user_clubs`), convites por `@username` e cargos (`owner`, `moderator`, `member`). | ✅ **Homologado & Ativo** |
-| **Canais Temáticos de Chat** | Estrutura de canais (`club_channels`): `#geral`, `#spoilers` e `#capitulos` com auto-scroll e atalhos rápidos. | ✅ **Homologado & Ativo** |
+| **Clubes Canônicos do Livro (1 Livro = 1 Clube)** | Arquitetura oficial onde cada obra possui seu clube canônico (`official_book_groups`), eliminando duplicidade de clubes soltos. | ✅ **Homologado & Ativo** |
+| **Diretório de Clubes Comunitários** | Rota `/comunidade` (B23) como catálogo geral de todos os clubes de livros da plataforma, exibindo métricas de membros e atalhos de canais. | ✅ **Homologado & Ativo** |
+| **Resolvedor Contextual de Clubes** | Rota `/clubes/novo?livro=[slug]` (B25) redireciona diretamente ao clube oficial correspondente, garantindo unicidade. | ✅ **Homologado & Ativo** |
+| **Canais Temáticos de Discussão** | Estrutura padronizada por livro: `#sem-spoilers`, `#com-spoilers` e canais por capítulo (`cap-X`), com consentimento prévio e auto-scroll. | ✅ **Homologado & Ativo** |
+| **Botão de Entrada de Discussão Unificado** | Componente `DiscussionEntryButton` operando em modo livro (`mode="book"`) ou capítulo (`mode="chapter"`), com gate de login seguro. | ✅ **Homologado & Ativo** |
 | **Proteção Anti-Spoiler & Consentimento** | Máscara de blur visual em mensagens com spoiler e barreira de consentimento formal (`channel_members_spoiler_consent`). | ✅ **Homologado & Ativo** |
 | **Respostas Encadeadas Seguras** | Suporte a replies no chat com validação de que pai e resposta pertencem ao mesmo canal (`cross_channel_parent_reply_denied`). | ✅ **Homologado & Ativo** |
 | **Edição com Concorrência Otimista** | Edição de mensagens com verificação de versão (`p_expected_version`), evitando sobrescritas acidentais. | ✅ **Homologado & Ativo** |

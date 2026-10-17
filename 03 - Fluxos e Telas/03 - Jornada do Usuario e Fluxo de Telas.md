@@ -1,155 +1,172 @@
-# 03 — Jornada do Usuário & Fluxo de Telas
+# 03 — Jornada do Usuário & Fluxo de Telas (Matriz Excalidraw 34 Blocos / 41 Setas)
 
-> **Documento:** Engenharia de Telas, Transições de Estado, Interações do Usuário e Design Nimble  
+> **Documento:** Mapeamento Integral dos 34 Blocos, 41 Conexões, Transições de Estado e Navegação  
 > **MOC Principal:** [[DIYSpur - Master Index]]  
-> **Tags:** `#ux` `#user-journey` `#telas` `#frontend` `#nextjs` `#design-nimble`
+> **Fonte Visual:** [Diagrama Excalidraw](https://excalidraw.com/#json=tYaSpTqmPhVCEgYXJNKaC,dm9gQqoyh7phc89WMtSBBg)  
+> **Tags:** `#ux` `#user-journey` `#telas` `#frontend` `#nextjs` `#excalidraw`
 
 ---
 
-## 1. Fluxo Geral de Navegação da Aplicação
+## 1. Grafo Integral de Navegação
 
-O ecossistema DIYSpur possui uma malha de navegação interconectada que orienta o leitor através de rotas intuitivas sem caminhos sem saída (*dead ends*):
+A arquitetura de telas do DIYSPUR implementa estritamente os **34 blocos funcionais** e as **41 conexões (setas)** do diagrama oficial:
 
 ```mermaid
 flowchart TD
-    HOME["/ (Home)"] --> LIVROS["/livros (Catálogo)"]
-    HOME --> TEMP["/temporadas/[slug] (Cronograma)"]
-    HOME --> CALENDARIO["/calendario (Encontros Gerais)"]
-    HOME --> RANKING["/ranking (Rankings de XP & Livros)"]
-    HOME --> NOTIF["/notificacoes (Central de Alertas)"]
-    
-    LIVROS --> LIVRO_DET["/livros/[slug] (Ficha da Obra)"]
-    LIVRO_DET -->|Controle de Leitura| ESTANTE["Estante Canônica (/historico)"]
-    LIVRO_DET -->|Grupo Oficial| CLUBE_DET["/clubes/[slug] (Painel do Clube)"]
-    LIVRO_DET --> TEMP
-    
-    TEMP --> CAP["/capitulos/[id] (Segunda Tela)"]
-    CAP -->|Pílula de Debate| CHAT["/clubes/[slug]/canais/[channelSlug]"]
-    CAP -->|Encontro do Capítulo| EVENTO["/eventos/[id] (Detalhes do Evento)"]
-    
-    CLUBE_DET --> CHAT
-    CLUBE_DET --> CLUBE_CONF["/clubes/[slug]/configuracoes"]
-    CLUBE_DET --> CLUBE_NOVO_EVT["/clubes/[slug]/eventos/novo"]
-    CLUBE_NOVO_EVT --> EVENTO
-    CALENDARIO --> EVENTO
-    
-    subgraph EspacoPessoal ["Espaço do Leitor Autenticado"]
-        PERFIL["/perfil"]
-        HISTORICO["/historico"]
-        DIARIO["/diario"]
-        METAS["/metas"]
-        FILA["/minha-fila"]
-    end
-    
-    subgraph ConsoleAdmin ["Console Administrativo (Repositório Independente diyspur/admin)"]
-        ADMIN_DASH["/admin (Dashboard & Atalhos)"]
-        ADMIN_BOOKS["/admin/books (Obras & Capas)"]
-        ADMIN_SEASONS["/admin/seasons/[id] (Cronogramas)"]
-        ADMIN_MOD["/admin/moderation (Fila de Moderação)"]
-        ADMIN_AUTH["/entrar (Auto-Login & Sessão)"]
-    end
+  %% Blocos Centrais
+  B01["B01: Home (/)"]
+  B02["B02: MENU/HEADER"]
+  B03["B03: FOOTER"]
+  B04["B04: Catálogo de Livros (/livros)"]
+  B05["B05: Ficha do Livro (/livros/[slug])"]
+  B06["B06: Temporada (/temporadas/[slug])"]
+  B07["B07: Capítulo (/capitulos/[id])"]
+  
+  %% Autenticacao
+  B08["B08: Cadastro (/cadastro)"]
+  B09["B09: Entrar (/entrar)"]
+  B10["B10: Recuperar Senha (/recuperar-senha)"]
+  B11["B11: Atualizar Senha (/atualizar-senha)"]
+  B12["B12: Perfil (/perfil)"]
+  B13["B13: Encerrar Sessão (/auth/signout)"]
+  
+  %% Area Pessoal
+  B14["B14: Histórico (/historico)"]
+  B15["B15: Diário Pessoal (/diario)"]
+  B16["B16: Metas Anuais (/metas)"]
+  B17["B17: Desafios (/desafios)"]
+  B18["B18: Ranking (/ranking)"]
+  B19["B19: Minha Fila (/minha-fila)"]
+  B20["B20: Listas de Leitura (/listas)"]
+  B21["B21: Leituras Compartilhadas (/leituras-compartilhadas)"]
+  B22["B22: Notificações e Convites (/notificacoes)"]
+  
+  %% Comunidade e Clubes
+  B23["B23: Feed/Diretório da Comunidade (/comunidade)"]
+  B24["B24: Explorar Clubes (/clubes)"]
+  B25["B25: Criar/Resolver Clube (/clubes/novo)"]
+  B26["B26: Detalhe do Clube (/clubes/[slug])"]
+  B27["B27: Calendário / RSVP (/calendario)"]
+  B28["B28: Votação da Próxima Leitura (/votacao)"]
+  
+  %% Institucional
+  B29["B29: Privacidade e Consentimento (/privacidade)"]
+  B30["B30: Termos de Uso (/termos)"]
+  
+  %% Painel Administrativo
+  B31["B31: Painel de Administração (/admin)"]
+  B32["B32: Cadastro de Livros (/admin/books)"]
+  B33["B33: Editor de Temporada (/admin/seasons/[id])"]
+  B34["B34: Moderação (/admin/moderation)"]
+
+  %% 41 Conexões (Setas)
+  B31 -->|F01| B32
+  B31 -->|F02| B33
+  B31 -->|F03| B34
+  B01 -->|F04| B02
+  B02 -->|F05| B04
+  B04 -->|F06| B05
+  B05 -->|F07| B06
+  B06 -->|F08| B07
+  B08 -->|F09| B09
+  B09 -->|F10| B12
+  B09 -->|F11| B11
+  B09 -->|F12| B10
+  B08 -->|F13| B10
+  B08 -->|F14| B11
+  B12 -->|F15| B13
+  B09 -->|F16| B13
+  B12 -->|F17| B14
+  B02 -->|F18| B08
+  B01 -->|F19| B03
+  B03 -->|F20| B30
+  B03 -->|F21| B29
+  B02 -->|F22| B15
+  B02 -->|F23| B22
+  B05 -->|F24| B14
+  B05 -->|F25| B21
+  B21 -->|F26| B22
+  B12 -->|F27| B18
+  B01 -->|F28| B18
+  B05 -->|F29| B17
+  B12 -->|F30| B16
+  B12 -->|F31| B17
+  B02 -->|F32| B23
+  B05 -->|F33| B24
+  B23 -->|F34| B24
+  B24 -->|F35| B25
+  B25 -->|F36| B26
+  B07 -->|F37| B24
+  B26 -->|F38| B27
+  B02 -->|F39| B28
+  B12 -->|F40| B19
+  B19 -->|F41| B20
 ```
 
 ---
 
-## 2. Detalhamento Tela a Tela
+## 2. Inventário dos 34 Blocos e Comportamento Funcional
 
-### 2.1 Página Inicial / Landing (`/`)
-- **Propósito:** Apresentar a proposta de segunda tela, destacar a leitura coletiva ativa e fornecer chamadas para ação (CTA) claras.
-- **Componentes Nimble:** Hero com alto contraste, card da temporada ativa com capas com aspect-ratio preservado, agenda de encontros próximos e depoimentos de membros.
-- **Touch Targets:** Botões principais com altura mínima de $48\text{px}$ e padding ergonômico.
-
----
-
-### 2.2 Catálogo & Ficha da Obra (`/livros` e `/livros/[slug]`)
-- **Propósito:** Descoberta de títulos e engajamento direto com a obra.
-- **Recursos Integrados:**
-  - **`BookReadingControl`:** Seletor de status canônico (`Quero Ler`, `Lendo`, `Lido`), seleção da edição específica (`book_edition_id`) e controle de página atual com cálculo instantâneo de percentual.
-  - **`BookReadingStats`:** Contadores comunitários de leitores ativos, concluídos e ritmo coletivo de leitura.
-  - **`BookCommunityPanel`:** Atalho direto para o Clube Oficial da obra (`official_book_groups`) e avisos de conteúdo (*content warnings*).
-
----
-
-### 2.3 Segunda Tela do Capítulo (`/capitulos/[id]`)
-- **Propósito:** Acompanhamento interativo do trecho da semana.
-- **Componentes:**
-  1. **`YouTubeFacade`:** Embed sob demanda que não consome dados até a interação do leitor, suportando salto temporal direto via parâmetro `?t=`.
-  2. **`DiscussionEntryButton`:** Pílula contextual que guia o leitor diretamente para o canal de discussão correspondente ao capítulo.
-  3. **Comentários Sincronizados:** Linha do tempo de comentários atrelados a segundos específicos do vídeo.
-  4. **Quiz do Capítulo:** Perguntas de fixação pedagógica com correção segura no servidor.
-
----
-
-### 2.4 Clubes & Canais de Discussão (`/clubes`, `/clubes/[slug]`, `/clubes/[slug]/canais/[channelSlug]`)
-- **Propósito:** Espaço de diálogo comunitário e socialização literária.
-- **Dinâmica do Workspace de Chat:**
-  - **`ChannelDirectory`:** Navegação lateral entre `#geral`, `#spoilers` e `#capitulos`.
-  - **`SpoilerConsent`:** Barreira modal para canais com spoiler, exigindo aceite registrado no banco.
-  - **`ChannelChat`:** Feed de mensagens em tempo real com auto-scroll inteligente, suporte a respostas encadeadas (`reply`), bolhas de spoiler com blur e composer com atalho `Cmd/Ctrl + Enter`.
-
----
-
-### 2.5 Calendário & Eventos (`/calendario`, `/eventos/[id]`, `/clubes/[slug]/eventos/novo`)
-- **Propósito:** Agendamento e participação em debates virtuais ou presenciais.
-- **Recursos:**
-  - Cards com badges de livro e clube associados.
-  - Página `/eventos/[id]` com marcação rica Schema.org Event (`JsonLd`).
-  - Confirmação de presença em tempo real (RSVP).
-  - Botão "Adicionar ao Google Agenda" e download de arquivo `.ics` rigorosamente compatível com a **RFC 5545**.
+| Bloco | Rota / Superfície | Descrição e Especificação Técnica |
+|---|---|---|
+| **B01** | `/` (Home) | Entrada da aplicação com exibição da temporada ativa, catálogo e acesso ao ranking da temporada (**F28**). |
+| **B02** | Header / Menu | Barra de navegação global com links diretos para Catálogo, Cadastro, Diário, Notificações, Comunidade e Votação. |
+| **B03** | Footer | Rodapé global com links institucionais (Termos, Privacidade, Suporte) e redes sociais (Instagram, TikTok, YouTube). |
+| **B04** | `/livros` | Catálogo de livros completo com busca por título e paginação. |
+| **B05** | `/livros/[slug]` | Ficha detalhada do livro com controle único "Sua leitura" (`BookReadingControl`), CTA único "Grupo do livro" (`DiscussionEntryButton`), link para temporada (**F07**), histórico (**F24**), convite por e-mail (**F25**) e desafios (**F29**). |
+| **B06** | `/temporadas/[slug]` | Cronograma da temporada do livro com capítulos publicados e bloqueados. |
+| **B07** | `/capitulos/[id]` | Segunda tela de vídeo, controle de progresso (`ChapterProgress`), botão "Comentar no grupo" e quiz. |
+| **B08** | `/cadastro` | Criação de conta de usuário com confirmação por e-mail. |
+| **B09** | `/entrar` | Login com suporte a `redirect` para retorno ao contexto prévio do leitor. |
+| **B10** | `/recuperar-senha` | Solicitação de link de redefinição de credenciais. |
+| **B11** | `/atualizar-senha` | Formulário seguro para nova senha sob token de recuperação verificado. |
+| **B12** | `/perfil` | Central do leitor: links para Histórico, Metas, Desafios, Minha Fila, Rankings e Logout. |
+| **B13** | `/auth/signout` | Endpoint HTTP POST para encerramento atômico de sessão. |
+| **B14** | `/historico` | Estante sincronizada: exibe instantaneamente os livros marcados como "Estou lendo" na ficha do livro e o avanço capítulo a capítulo. |
+| **B15** | `/diario` | Notebook pessoal para anotações privadas de livros, com suporte a múltiplos registros sem obrigatoriedade de métricas de páginas/minutos. |
+| **B16** | `/metas` | Gestão de metas pessoais flexíveis por usuário, atualizadas automaticamente a cada livro concluído. |
+| **B17** | `/desafios` | Desafios editoriais publicados pelos administradores para incentivar a leitura e conceder XP após ações completadas. |
+| **B18** | `/ranking` & `/ranking/livros` | Ranking da Temporada (XP) e Rankings de Livros (Mais lidos, Lendo agora, Concluídos, Desistências). |
+| **B19** | `/minha-fila` | Playlist pessoal contínua para priorização de leitura (sem restrição artificial de 5 itens) e link para listas (**F41**). |
+| **B20** | `/listas` | Listas de leitura pessoais, públicas ou compartilhadas com colaboradores autorizados. |
+| **B21** | `/leituras-compartilhadas` | Espaço de leitura em grupo com convite de livros por e-mail para amigos. |
+| **B22** | `/notificacoes` | Central de notificações: convites recebidos, datas de encontros e lançamento de temporadas dos livros em leitura. |
+| **B23** | `/comunidade` | Diretório geral de clubes oficiais por livro ("Tem a lista de todos os clubes"). |
+| **B24** | `/clubes` | Exploração de clubes oficiais com busca e paginação. |
+| **B25** | `/clubes/novo` | Resolvedor contextual: recebe `?livro=<UUID>`, entra no clube existente ou cria o grupo com os canais `sem-spoilers` e `com-spoilers`. |
+| **B26** | `/clubes/[slug]` | Hub do clube oficial com canais padrão, canais por capítulo e agenda de encontros. |
+| **B27** | `/calendario` | Agenda de encontros com confirmação de presença (RSVP). |
+| **B28** | `/votacao` | Enquetes da comunidade para escolha das próximas obras a serem debatidas. |
+| **B29** | `/privacidade` | Política de privacidade e governança de dados pessoais (LGPD). |
+| **B30** | `/termos` | Termos de uso e diretrizes comunitárias. |
+| **B31** | `/admin` | Painel de administração geral com atalhos para Livros, Temporadas e Moderação. |
+| **B32** | `/admin/books` | Gestão do catálogo editorial de livros e metadados. |
+| **B33** | `/admin/seasons/[id]` | Editor da temporada e capítulos do livro. |
+| **B34** | `/admin/moderation` | Painel de revisão de denúncias e sanções de moderação. |
 
 ---
 
-### 2.6 Ranking Comunitário (`/ranking`)
-- **Propósito:** Reconhecimento e estímulo ao hábito de leitura.
-- **Arquitetura de Abas via URL Query:**
-  - `?tipo=xp`: Ranking da temporada com pontuação de quizzes e metas cumpridas.
-  - `?tipo=livros`: Ranking dos livros mais lidos pela comunidade.
+## 3. Especificações Visuais e Micro-Interações Next-Gen (Refatoração UI/UX)
 
----
+A refatoração visual e funcional do ecossistema DIYSpur elevou a experiência de navegação e retenção, adotando a linguagem de design futurista e minimalista com aceleração por GPU (60fps P99):
 
-### 2.7 Estante do Leitor no Histórico (`/historico`)
-- **Propósito:** Centralizar a vida literária do leitor.
-- **Estrutura:** Abas com filtros por status de leitura (*Lendo*, *Quero Ler*, *Lidos*, *Pausados*) com acesso rápido à atualização de progresso e resenhas.
+### 3.1 B01 — Home Mission Control (`/`)
+- **Aura Atmosférica Dinâmica:** Radial gradient no topo (`from-brand-500/10 via-brand-600/5 to-transparent`) com `pointer-events-none` sem repintura do layout.
+- **Badge Operacional em Tempo Real:** Indicador com animação contínua `animate-pulse-glow` e ponto de status verde esmeralda (`bg-emerald-500`), informando a temporada e capítulos ativos.
+- **Hero Foco e Fitts/Hick:** Título responsivo com destaque em gradiente futurista (`bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent`), subtítulo em densidade tipográfica compensada (380/480) e ações primárias/secundárias claras com `CyberButton`.
+- **Bento-Grid de Descoberta:** Cards de destaque operacional encapsulados em `GlassCard` com micro-bordas de 1px e backdrop blur de 12px.
 
----
+### 3.2 B02 — Sticky Frosted Glass Header (`SiteHeader`)
+- **Profundidade Adaptativa:** Efeito de vidro jateado (`backdrop-blur-md bg-white/70 dark:bg-black/80`) com borda inferior de 1px (`border-zinc-200/80 dark:border-white/10`).
+- **Navegação com Press States GPU:** Micro-interações táteis nos links (`active:scale-95 transition-transform duration-200`).
+- **Menu Mobile com Animações Nativas:** Drawer responsivo sem flickering, bloqueio de scroll de fundo e foco acessível.
 
-### 2.8 Central de Notificações (`/notificacoes`)
-- **Propósito:** Gerenciamento unificado de alertas e avisos da comunidade.
-- **Funcionalidades:**
-  - Popover rápido no header (`NotificationCenter`) + página completa paginada.
-  - Filtros por canal (`discussions`, `editorial`, `events`, `gamification`).
-  - Ação em lote: "Marcar todas como lidas".
-  - Configuração de canais ativos e horários silenciosos.
+### 3.3 B04 & B05 — Catálogo e Ficha do Livro (`BookCard` e `DiscussionEntryButton`)
+- **Cards com Specular Glow:** Efeito visual no hover com `scale-[1.01]` e transição de box-shadow (`shadow-brand-500/10`) executada estritamente via GPU.
+- **Otimização de Imagens:** `next/image` com dimensões intrínsecas e `priority` opcional no Hero para evitar Layout Shifts (CLS = 0.000).
+- **Ações Rápidas sem Atrito:** CTA contextual único para leitura (`BookReadingControl`) e entrada instantânea no grupo do livro (`DiscussionEntryButton`).
 
----
+### 3.4 B07 — Segunda Tela do Capítulo HUD (`/capitulos/[id]`)
+- **Controle de Leitura e Foco:** Barra de progresso do capítulo (`ChapterProgress`) com transição fluida, player de apoio e botão de entrada direta no canal de discussão do capítulo no clube oficial (`DiscussionEntryButton`).
+- **Skeleton Screens Futuristas:** Substituição de spinners convencionais por `CyberSkeleton` com animação angular de `shimmer` a 60fps durante requisições assíncronas.
 
-### 2.9 Console Administrativo & Moderação (Repositório Independente `diyspur/admin`)
-- **Separação Arquitetural:** O console administrativo foi completamente desacoplado da aplicação do leitor (`diyspur-cloud/app`) e reside em seu próprio repositório dedicado ([diyspur/admin](https://github.com/diyspur/admin)), com deploy independente em `admin.diyspur.com` (ou Vercel isolado).
-- **Propósito:** Operação editorial, governança de comunidade, gerenciamento do catálogo e curadoria de conteúdo com privilégios de `service_role` e isolamento total de pacotes e rotas.
-- **Navegação Global:** O admin possui cabeçalho persistente (`AdminNav`) com menu clicável em todas as telas para alternância ágil entre Dashboard (`/admin`), Livros (`/admin/books`), Temporadas (`/admin/seasons`) e Moderação (`/admin/moderation`), além de seletor de tema.
-- **Autenticação e Auto-Login:**
-  - Conta administrativa dedicada pré-configurada no Supabase Auth.
-  - Endpoint `/api/auth/auto-login` e componente `AutoAuth` para autenticação silenciosa de desenvolvedores e operadores autorizados, com persistência via cookie seguro `diyspur_admin_session`.
-  - Endpoint `/api/auth/create-admin` para provisionamento automático do usuário `admin@diyspur.com` na inicialização do serviço.
-- **Telas Principais:**
-  - `/admin`: Dashboard executivo com contadores de livros cadastrados, temporadas ativas, pendências de moderação e atalhos rápidos.
-  - `/admin/books`: Catálogo com upload de capas via HTTPS obrigatório e criação rápida de obras.
-  - `/admin/seasons`: Listagem de temporadas canônicas cadastradas.
-  - `/admin/seasons/[id]`: Gestão de capítulos, cronograma semanal e pílulas de debate.
-  - `/admin/moderation`: Fila de denúncias comunitárias (`content_reports`) com ações imediatas de ocultar conteúdo, resolver ou dispensar.
-
----
-
-## 3. Padrões de Acessibilidade & Usabilidade Nimble
-
-- **Áreas Táteis $\ge 48\text{px}$:** Aplicadas em botões, links, seletores de abas e ícones.
-- **Marco Único `<main id="main-content">`:** Garantido em todas as páginas para navegação acessível.
-- **Feedback Auditivo:** Regiões dinâmicas utilizam `aria-live="polite"` para leitores de tela.
-- **Tratamento de Estados:** Todas as telas possuem estados de carregamento (*skeleton loaders*), estados vazios com ilustrações semânticas e mensagens claras de erro.
-
----
-
-## 4. Navegação Relacionada
-- Consultar os componentes e tokens de design: [[06.3 - Dicionario de Telas, Componentes e Design Tokens Nimble]]
-- Conhecer a arquitetura dos canais de discussão: [[02.4 - Comunidade de Leitura, Clubes e Canais de Discussao]]
-- Voltar ao MOC central: [[DIYSpur - Master Index]]

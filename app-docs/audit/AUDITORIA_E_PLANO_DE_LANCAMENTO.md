@@ -45,7 +45,7 @@ Entretanto, o produto enfrenta 3 desalinhamentos críticos para seu sucesso come
 
 ### O que funciona e deve permanecer como está
 - **Segurança de Dados e RLS**: Políticas de Row Level Security estritas em todas as tabelas de usuário. Autorização de leitura e mutação ocorre exclusivamente no servidor derivando identidade de claims JWT (`auth.uid()`), sem confiar em inputs do cliente.
-- **Lógica Anti-Spoiler**: O sistema de proteção de spoilers em comentários (`comment-spoiler-card.tsx`) e o bloqueio de capítulos com gate de quiz validado no backend (`getChapters`) são diferenciais raros e de altíssimo valor.
+- **Lógica Anti-Spoiler**: O sistema de proteção de spoilers nos canais canônicos de clubes (`#sem-spoilers`, `#com-spoilers`, `channel_members_spoiler_consent`) e o bloqueio de capítulos com gate de quiz validado no backend (`getChapters`) são diferenciais raros e de altíssimo valor.
 - **Higienização Zero-PII e Consentimento**: O banner LGPD (`analytics-consent-banner.tsx`) com modo Opt-in/Opt-out rigoroso e a sanitização de eventos sem transmissão de nomes, e-mails ou conteúdo privado.
 - **Performance de Renderização**: Zero FOUC com script inline no `<head>`, carregamento sob demanda do YouTube com fachada leve (`youtube-facade.tsx`) e imagens otimizadas com formatos WebP/AVIF.
 

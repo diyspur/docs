@@ -37,20 +37,21 @@ Public significa que há shell/conteúdo acessível sem sessão; Authenticated s
 | `/capitulos/[id]` | Public / Authenticated; gate por capítulo | Acompanhar uma etapa da leitura, participar da discussão e registrar o próprio avanço. | [Capítulo: vídeo, progresso, conversa e quiz](pages/capitulo.md) |
 | `/calendario` | Public / Authenticated | Consultar encontros e organizar a participação no horário correto. | [Calendário e presença](pages/calendario.md) |
 | `/votacao` | Public / Authenticated | Permitir escolhas coletivas e consultar decisões anteriores. | [Votação da próxima leitura](pages/votacao.md) |
-| `/comunidade` | Public | Descobrir discussões com contexto do capítulo e proteção visual de spoiler. | [Conversas da comunidade](pages/comunidade.md) |
+| `/comunidade` | Public | Diretório oficial de todos os clubes de livros da plataforma com atalhos para canais temáticos. | [Diretório da comunidade](pages/comunidade.md) |
 | `/clubes` | Public / Authenticated | Encontrar espaços de leitura e abrir a ficha de um clube. | [Descobrir clubes](pages/clubes.md) |
-| `/clubes/novo` | Authenticated | Criar um espaço público ou privado para uma turma de leitores. | [Criar clube](pages/clube-novo.md) |
-| `/clubes/[slug]` | Public / Authenticated / Owner | Consultar o espaço, participar e acompanhar o ciclo definido pelo responsável. | [Ficha e gestão do clube](pages/clube.md) |
+| `/clubes/novo` | Authenticated | Resolvedor contextual para abrir ou vincular o clube oficial de um livro (`?livro=slug`). | [Iniciar clube do livro](pages/clube-novo.md) |
+| `/clubes/[slug]` | Public / Authenticated / Owner | Consultar o espaço, participar e acompanhar os canais temáticos (#sem-spoilers, #com-spoilers). | [Ficha e gestão do clube](pages/clube.md) |
 | `/perfil` | Authenticated | Reunir indicadores pessoais, leituras recentes, quizzes, conquistas e acesso aos dados. | [Meu espaço](pages/perfil.md) |
 | `/historico` | Authenticated | Retomar capítulos e verificar conclusão e resultados de quiz. | [Histórico de leitura](pages/historico.md) |
 | `/diario` | Authenticated | Guardar anotações privadas e medidas de uma sessão de leitura. | [Diário de leitura](pages/diario.md) |
 | `/listas` | Authenticated; shell público | Organizar títulos em listas próprias e consultar conteúdo compartilhado autorizado. | [Listas de leitura](pages/listas.md) |
-| `/metas` | Authenticated | Definir objetivos de livros, páginas e tempo e comparar com a leitura registrada. | [Metas anuais](pages/metas.md) |
-| `/minha-fila` | Authenticated | Priorizar até cinco títulos para ler a seguir. | [Fila de próximos livros](pages/minha-fila.md) |
-| `/leituras-compartilhadas` | Authenticated; shell público | Consultar grupos de leitura e seus checkpoints autorizados. | [Leituras compartilhadas](pages/leituras-compartilhadas.md) |
+| `/metas` | Authenticated | Definir múltiplos objetivos de livros, páginas e tempo e comparar com a leitura registrada. | [Metas anuais](pages/metas.md) |
+| `/minha-fila` | Authenticated | Priorizar até cinco títulos para ler a seguir com atalho para gerenciar listas. | [Fila de próximos livros](pages/minha-fila.md) |
+| `/leituras-compartilhadas` | Authenticated; shell público | Consultar grupos de leitura, convidar amigos por livro e acessar convites pendentes. | [Leituras compartilhadas](pages/leituras-compartilhadas.md) |
 | `/notificacoes` | Authenticated | Consultar atualizações pessoais e responder convites de clubes. | [Notificações e convites](pages/notificacoes.md) |
 | `/desafios` | Public / Authenticated | Descobrir desafios publicados e acompanhar a participação pessoal. | [Desafios de leitura](pages/desafios.md) |
-| `/ranking` | Authenticated | Consultar posições por XP na temporada ativa. | [Ranking da temporada](pages/ranking.md) |
+| `/ranking` | Public / Authenticated | Consultar posições por XP na temporada ativa e as 5 regras de pontuação com visão visitante. | [Ranking da temporada](pages/ranking.md) |
+| `/ranking/livros` | Public | Consultar o ranking de livros da comunidade em 4 abas (Mais Lidos, Lendo Agora, Concluídos, Desistências). | [Ranking de livros](pages/ranking.md) |
 | `/entrar` | Public; redireciona autenticados | Acessar a conta por senha ou link de acesso e voltar à página solicitada. | [Entrar na comunidade](pages/entrar.md) |
 | `/cadastro` | Public; redireciona autenticados | Criar identidade de leitor e iniciar participação pessoal. | [Criar conta](pages/cadastro.md) |
 | `/recuperar-senha` | Public | Solicitar instruções para recuperar a senha sem revelar se uma conta existe. | [Recuperar acesso](pages/recuperar-senha.md) |
@@ -63,10 +64,8 @@ Public significa que há shell/conteúdo acessível sem sessão; Authenticated s
 | `/admin/moderation` | Admin (Repositório Independente) | Revisar denúncias e decidir medidas sobre conteúdo da comunidade. | [Fila de moderação](pages/admin-moderation.md) |
 
 > [!NOTE]
-> **Desacoplamento do Console Administrativo:**  
-> As quatro rotas administrativas (`/admin`, `/admin/books`, `/admin/seasons/[id]`, `/admin/moderation`) foram desacopladas do repositório da aplicação do leitor (`diyspur/app`) e migradas com segurança para o repositório independente [diyspur/admin](https://github.com/diyspur/admin). A nova aplicação conta com auto-login seguro, menu persistente clicável e suíte de testes isolada.
-
-O entrypoint dinâmico `src/app/[memberPage]/page.tsx` é fallback para ranking/desafios/notificacoes/historico; as rotas estáticas específicas prevalecem. Ele não cria um painel adicional nem significa que qualquer nome arbitrário de página seja válido. Não foram encontradas páginas /dashboard ou /settings dedicadas.
+> **Desacoplamento do Console Administrativo e Limpeza de Rotas Mortas:**  
+> As quatro rotas administrativas (`/admin`, `/admin/books`, `/admin/seasons/[id]`, `/admin/moderation`) foram desacopladas do repositório da aplicação do leitor (`diyspur/app`) e migradas com segurança para o repositório independente [diyspur/admin](https://github.com/diyspur/admin). O antigo entrypoint fallback `src/app/[memberPage]/page.tsx` foi removido como código morto, uma vez que todas as páginas de usuário (`/ranking`, `/desafios`, `/notificacoes`, `/historico`) possuem rotas estáticas dedicadas.
 
 ## Endereços concretos visitados
 

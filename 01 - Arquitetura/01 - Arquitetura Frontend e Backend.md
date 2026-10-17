@@ -61,6 +61,14 @@ A persistência de sessão é gerenciada por cookies HTTP-only seguros sincroniz
 - **`src/proxy.ts` / Middleware:** Intercepta requisições, renova o access token do Supabase silenciosamente antes do vencimento e executa **Safe Redirects** para impedir vulnerabilidades de *Open Redirect*.
 - **Helper de Claims (`getClaims`):** Extrai a identidade validada diretamente do JWT assinado, nunca permitindo que o cliente passe `user_id` em payloads.
 
+### 2.4 Design Engine Futurista & Camada de Componentes Core (`src/components/ui/`)
+O frontend integra uma camada desacoplada de componentes de alta performance inspirados em benchmarks como GitNimble:
+- **`GlassCard`:** Card translúcido com *specular radial spotlight* rastreando o cursor do mouse em tempo real (`pointer-events: none` em camada absoluta acelerada por GPU).
+- **`CyberButton`:** Botão ergonômico padronizado com hit targets mínimos de $48\text{px}$, micro-feedback elástico no clique (`scale(0.98)`), anel de foco `focus-visible` e suporte acessível a loading via `aria-live="polite"`.
+- **`CyberSkeleton`:** Loader contínuo com varredura laser via `@keyframes shimmer` (sub-150ms).
+- **Eixos Tipográficos com Compensação OLED:** Pesos reduzidos no Dark Mode (`380` a `680`) para neutralizar aberração ótica em telas autoluminescentes.
+- **Densidade & Acessibilidade:** Suporte nativo a `data-density="compact|spacious"`, modo alto contraste (`data-contrast="high"`, ratio $\ge 7:1$) e paletas adaptativas para daltonismo.
+
 ---
 
 ## 3. Estrutura de Diretórios do Frontend do Leitor (`app`)
@@ -69,7 +77,7 @@ O repositório `diyspur-cloud/app` (ou `diyspur/app`) é focado exclusivamente n
 
 ```text
 app/
-├── public/                 # Assets estáticos (ícones, logos, manifest)
+├── public/                 # Assets estáticos (ícones, logos, manifest, llms.txt)
 ├── src/
 │   ├── app/                # Next.js App Router (Rotas do Leitor)
 │   │   ├── (public)/       # Rotas abertas: /, /livros, /temporadas, /termos
@@ -78,22 +86,29 @@ app/
 │   │   ├── (community)/    # Rotas sociais: /clubes, /comunidade, /votacao
 │   │   ├── (account)/      # Rotas do usuário: /perfil, /historico, /minha-fila
 │   │   ├── api/            # Route Handlers técnicos (health, ics, webhooks)
-│   │   ├── layout.tsx      # Layout raiz com fontes e tokens globais
+│   │   ├── layout.tsx      # Layout raiz com fontes, tokens e anti-FOUC script
 │   │   ├── error.tsx       # Error Boundary da aplicação
 │   │   └── global-error.tsx# Fallback de erro crítico de infraestrutura
-│   ├── components/         # Componentes UI reutilizáveis (botões, cards, modais)
+│   ├── components/         # Componentes UI de interface do usuário:
+│   │   ├── ui/             # Core UI futurista (glass-card, cyber-button, cyber-skeleton)
+│   │   ├── books/          # Componentes de obras (reading-control, reading-stats)
+│   │   ├── chapters/       # Segunda tela (chapter-progress, host-prompt)
+│   │   ├── discussions/    # Pílulas e diálogos de debate seguro
+│   │   └── site-shell.tsx  # SiteHeader com glassmorphism fosco e SiteFooter
 │   ├── features/           # Módulos de domínio de negócio:
 │   │   ├── auth/           # Login, cadastro, helpers de sessão
 │   │   ├── catalog/        # Queries de livros, temporadas e capítulos
-│   │   ├── chapters/       # Player de vídeo, chat sincronizado e quiz
-│   │   ├── clubs/          # Lógica de criação, convites e gestão de clubes
+│   │   ├── chapters/       # Ações server-side de leitura, comentários e quiz
+│   │   ├── clubs/          # Consulta de clubes oficiais e canais
 │   │   ├── diary/          # CRUD e paginação de notas do diário de leitura
-│   │   ├── gamification/   # Cálculo de XP, ranking e badges
+│   │   ├── discussions/    # Contrato unificado de canais oficiais e anti-spoiler
+│   │   ├── gamification/   # Concessão e cálculo de XP, streaks e badges
+│   │   ├── rankings/       # Queries de ranking de temporada (XP) e ranking de livros
 │   │   └── profile/        # Preferências de privacidade e exportação LGPD
-│   ├── lib/                # Configuração de clientes (Supabase, Sentry, PostHog, date.ts)
+│   ├── lib/                # Clientes (Supabase, Sentry, PostHog, discussion-contract.ts)
 │   ├── styles/             # Tokens CSS (tokens.css com variáveis Nimble e global.css)
-│   └── types/              # Definições TypeScript (database.ts gerado via CLI)
-├── tests/                  # Testes automatizados (30 arquivos / 128 testes unitários + E2E)
+│   └── types/              # Definições TypeScript (database.ts)
+├── tests/                  # Testes automatizados (31 arquivos / 132 testes unitários + E2E)
 ├── next.config.mjs         # Configurações do Next.js (Headers de segurança, CSP)
 └── package.json            # Dependências e scripts
 ```
@@ -187,9 +202,10 @@ sequenceDiagram
     Leitor->>Next: Acessa /capitulos/123
     Next->>Supabase: Consulta metadados do capítulo e status da leitura
     Supabase-->>Next: Retorna capítulo e liberação anti-spoiler
-    Next-->>Leitor: Renderiza página com fachada de vídeo e comentários
+    Next-->>Leitor: Renderiza página com fachada de vídeo, progresso e canal de discussão
     
-    Leitor->>YouTube: Clica em "Assistir vídeo" (carrega player sob demanda)
+    Leitor->>Next: Clica em "Entrar no canal de discussão deste capítulo"
+    Next-->>Leitor: Redireciona para o canal canônico do livro (/clubes/[id]?canal=cap-X)
     YouTube-->>Leitor: Transmite vídeo de contextualização da semana
     
     Leitor->>Next: Envia resposta do Quiz do Capítulo

@@ -12,7 +12,9 @@ Sessão e vínculo de dono/membro/autorização para leituras privadas.
 
 ## 3. UI Components & Layout
 
-Grupos; relação Você organiza/Você participa/Acesso autorizado; livro; período; limite de membros; metas por páginas/percentual/data; estado vazio.
+- **Card de Convite Contextual (`?livro=[slug]`, Excalidraw B17):** Exibição em destaque da obra com opção de convidar leitores parceiros via e-mail ou link direto.
+- **Painel de Convites Pendentes:** Link e atalho para a Central de Notificações (`/notificacoes`, F25/F26) para aceitar ou recusar convites de amigos.
+- **Lista de Leituras Compartilhadas:** Grupos ativos; relação Você organiza / Você participa; livro associado; período de leitura; checkpoints e metas por páginas ou percentual; estado vazio com convite para ler em conjunto.
 
 ![Leituras compartilhadas — captura da auditoria de 12/10/2026](../images/leituras-compartilhadas.jpg)
 
@@ -20,11 +22,10 @@ Grupos; relação Você organiza/Você participa/Acesso autorizado; livro; perí
 
 ## 4. Step-by-Step User Flow
 
-1. **Step 1:** Abra **Leituras compartilhadas** na área pessoal.
-2. **Step 2:** Se houver grupos, confira sua relação com cada leitura e o livro associado.
-3. **Step 3:** Leia os checkpoints na ordem das etapas e os limites de páginas, porcentagem ou data.
-4. **Step 4:** Use o link do livro para consultar a obra. Sem grupos, explore livros ou clubes.
-5. **Step 5:** A página atual é de consulta: não há formulário de criar grupo, convidar ou concluir checkpoint nesta rota. Solicite ao organizador a configuração/acesso pelo fluxo disponível da operação.
+1. **Step 1:** Abra **Leituras compartilhadas** na área pessoal ou pelo botão "Convidar amigos" na ficha de um livro (`?livro=[slug]`).
+2. **Step 2:** Se houver um livro selecionado, utilize o formulário de convite para convidar amigos para a leitura da obra.
+3. **Step 3:** Verifique convites recebidos acessando o atalho para a **Central de Notificações** (`/notificacoes`).
+4. **Step 4:** Acompanhe o avanço dos checkpoints e limites de leitura acordados com seus parceiros de leitura.
 
 ### Interação com o backend
 

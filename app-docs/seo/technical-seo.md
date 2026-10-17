@@ -35,11 +35,19 @@ Implementado em `src/app/robots.ts`:
 ## 4. Dados Estruturados (`application/ld+json`)
 - Implementado em `src/components/json-ld.tsx`.
 - **Segurança**: Serialização com escape de caracteres `<` (`.replace(/</g, '\\u003c')`) para prevenir quebras do contexto `<script>`.
-- **Schemas Globais**:
-  - `Organization`: Nome, URL e logotipo oficial.
+- **Schemas Globais e Específicos:**
+  - `Organization`: Nome, URL, logotipo oficial e redes sociais (`sameAs`: Instagram, TikTok, YouTube).
   - `WebSite`: Nome, URL e SearchAction apontando para `/livros?q={search_term_string}`.
+  - `Book`: Nome, autor (`Person`), sinopse (`description`), idioma (`pt-BR`), ISBN/capa quando presentes, e nó semântico `subjectOf` vinculando a obra ao seu clube oficial de leitura comunitária.
+  - `LearningResource` (Capítulos e Guias): Tipado como `DiscussionGuide` para capítulos públicos com `educationalLevel: 'AdultEducation'`, `isPartOf` vinculado ao livro pai e `hasPart` para questões de reflexão e debate comunitário.
 
 ## 5. Metadados e Canonical
 - `metadataBase` configurada no layout raiz com base em `NEXT_PUBLIC_SITE_URL`.
 - Canonical absoluto gerado para evitar duplicação por parâmetros de query string ou rastreamento de campanhas.
 - Open Graph e Twitter Cards configurados com imagens em proporção 1200x630.
+
+## 6. Otimização para Motores de IA (GEO & AIO)
+- **Descoberta por LLMs:** Otimização para robôs de busca generativa (GPTBot, PerplexityBot, ClaudeBot, Google-Extended).
+- **Semântica HTML5 Rigorosa:** Conteúdo envolto em `<article>`, `<main>`, `<header>` e títulos hierárquicos `h1-h6` com dados contextuais explícitos.
+- **Prevenção de FOUC:** Script inline no cabeçalho executado antes da hidratação (`theme-preload.js`) para evitar quebras visuais e garantir First Contentful Paint (FCP) de altíssimo escore.
+

@@ -1,69 +1,60 @@
-# Capítulo: vídeo, progresso, conversa e quiz / `/capitulos/[id]`
+# Capítulo: Vídeo, Progresso, Discussão Unificada e Quiz / `/capitulos/[id]`
 
 ## 1. Overview & Purpose
 
 - **URL Path:** `/capitulos/[id]`
-- **Access Level:** Public / Authenticated; gate por capítulo
-- **Core Purpose:** Acompanhar uma etapa da leitura, participar da discussão e registrar o próprio avanço.
+- **Access Level:** Public / Authenticated; gate de sequência pedagógica
+- **Core Purpose:** Acompanhar a contextualização em vídeo do trecho, registrar o avanço percentual e conclusão do capítulo, responder quiz/enquete e ingressar diretamente no canal oficial de discussão do capítulo no clube do livro correspondente.
 
 ## 2. Prerequisites & Access
 
-Capítulo publicado e autorizado pela sequência. Sessão ativa para comentar, registrar progresso, responder quiz e pergunta do anfitrião. Ter o exemplar ajuda a acompanhar o trecho editorial.
+- Capítulo publicado e autorizado pela sequência pedagógica.
+- Sessão ativa para registrar progresso, responder quiz, votar na pergunta do anfitrião e participar do canal de discussão do clube.
 
 ## 3. UI Components & Layout
 
-Breadcrumbs; título/trecho; fachada do vídeo; comentários com segundos; progresso; conversa do capítulo; pergunta do anfitrião; quiz; anterior/próximo; informações da temporada e encontro.
-
-### Campos e regras
-
-| Campo | Regra | Como usar |
-|---|---|---|
-| Comentário | 1–4000 caracteres no fluxo de edição | Não informe dados pessoais; marque spoiler |
-| Momento do vídeo | Segundos | Leia o tempo no vídeo; não use mm:ss no campo numérico |
-| Progresso | Estimativa percentual | Concluir grava 100%; conclusão não regride |
-| Quiz | Uma alternativa por pergunta | Score calculado no backend, não no navegador |
-
-![Capítulo: vídeo, progresso, conversa e quiz — captura da auditoria de 12/10/2026](../images/capitulos-3a687744-7a0f-4dbf-9bad-f5ad3d920732.jpg)
-
-*Captura real do estado disponível nesta rodada. Em telas administrativas, a imagem mostra o bloqueio de uma conta comum; não representa o editor autorizado.*
+- **Navegação & Breadcrumbs:** Trilha de retorno para a temporada e indicação do número do capítulo e intervalo de páginas.
+- **Fachada de Vídeo (YouTube):** Player carregado sob demanda ao clicar em "Assistir vídeo".
+- **Painel de Progresso do Capítulo (`ChapterProgress`):**
+  - Slider numérico de 0 a 100% para salvar estimativa de leitura.
+  - Botão de ação rápida **"Concluir capítulo"** (registra 100% e concede +20 XP).
+- **Entrada Unificada de Discussão (`DiscussionEntryButton`):**
+  - Botão **"💬 Entrar no canal de discussão deste capítulo"**.
+  - Encaminha o leitor autenticado diretamente para o canal canônico `#cap-X` dentro do clube oficial do livro (`/clubes/[id]?canal=cap-X`), com suporte a barreiras anti-spoiler.
+- **Pergunta do Anfitrião:** Enquete interativa do capítulo com resultados agregados.
+- **Quiz de Compreensão:** Perguntas de múltipla escolha validadas no backend com concessão de +50 XP.
+- **Navegação Sequencial:** Botões táteis para capítulo anterior e próximo capítulo.
 
 ## 4. Step-by-Step User Flow
 
-1. **Step 1:** Abra o capítulo pelo cronograma. Se a página informar bloqueio, siga o login e o quiz anterior antes de voltar.
-2. **Step 2:** Leia o trecho proposto no seu exemplar e use **Assistir vídeo** quando quiser carregar o player externo do YouTube.
-3. **Step 3:** Para comentário sincronizado, informe o momento em segundos: 1 min 30 s corresponde a 90. Escreva a impressão, marque spoiler quando necessário e use **Comentar neste momento**.
-4. **Step 4:** Na seção de progresso, ajuste o avanço estimado e use **Salvar progresso**. Para terminar a etapa, escolha **Concluir capítulo**; a conclusão registra 100%.
-5. **Step 5:** Na conversa do capítulo, escreva o comentário e marque **Este comentário contém spoiler** quando revelar enredo; use **Publicar comentário**.
-6. **Step 6:** Comentários protegidos oferecem **Revelar comentário**. Leia o aviso antes de revelar; isso muda apenas a exibição local.
-7. **Step 7:** Se o comentário for seu, use **Editar**, revise o texto e salve. **Remover** segue a operação de remoção própria do backend. Para outro conteúdo inadequado, use **Denunciar**, informe o motivo e revise antes de enviar.
-8. **Step 8:** Na **Pergunta do anfitrião**, escolha uma das alternativas e use **Responder** ou **Atualizar resposta**. O resultado exibido é agregado.
-9. **Step 9:** Responda todas as perguntas do **Quiz do capítulo**. **Enviar respostas** fica desabilitado enquanto falta uma resposta. O resultado é validado no backend; uma tentativa registrada pode liberar a etapa seguinte conforme o contrato.
-10. **Step 10:** Use **Próximo capítulo** ou **Capítulo anterior** e consulte /historico para acompanhar o resultado persistido.
+1. **Step 1:** Abra o capítulo pelo cronograma da temporada ativa.
+2. **Step 2:** Acompanhe a contextualização em vídeo clicando em **Assistir vídeo**.
+3. **Step 3:** Registre sua leitura ajustando o slider de progresso ou clicando em **Concluir capítulo**.
+4. **Step 4:** Para debater o enredo com outros leitores, clique em **💬 Entrar no canal de discussão deste capítulo**. O sistema abre o canal específico do capítulo no clube do livro com proteção ativa contra spoilers.
+5. **Step 5:** Responda a **Pergunta do anfitrião** e complete o **Quiz do capítulo** para validar a compreensão e acumular XP.
+6. **Step 6:** Prossiga para a próxima etapa pelo botão **Próximo capítulo**.
 
 ### Interação com o backend
 
-getChapters consulta chapters, seasons, books, v_comments_visible, user_progress, v_quiz_questions_public, host_prompts, v_host_prompt_results e host_prompt_votes. Comentário insere comments; progresso faz upsert(user_id,chapter_id); quiz invoca quiz-validate com token e Idempotency-Key; conclusão/comentário invocam award-xp. Comentário sincronizado insere video_timed_comments e leitura usa get_visible_video_timed_comments. Denúncias usam report_content.
-
-Os passos de salvamento acima descrevem o contrato implementado. Confirme a mensagem de sucesso antes de considerar uma operação persistida; sua execução nesta rodada está indicada abaixo.
+- `getChapters` consulta `chapters`, `seasons`, `books`, `user_progress`, `v_quiz_questions_public`, `host_prompts`, `v_host_prompt_results` e `host_prompt_votes`.
+- `saveChapterProgress` faz upsert em `user_progress(user_id, chapter_id)` e dispara `award_xp`.
+- `openChapterDiscussionAction` resolve o canal oficial `#cap-X` em `official_book_groups` e `club_channels`.
+- O quiz é validado no servidor via Edge Function com header `Idempotency-Key`.
 
 ## 5. Error Handling & Edge Cases
 
-Gate anônimo observado nos capítulos 2 e 3. Após conclusão, progresso não pode regredir pelo fluxo atual. Falha de XP pode deixar a atividade salva com mensagem de sincronização pendente. Falha de quiz não confirma respostas; limite pode pedir espera de um minuto. Sessão expirada pede login. Vídeo indisponível não deve ser interpretado como perda do progresso.
-
-### Evidência e limite desta rodada
-
-Três capítulos visitados autenticados. Capítulo 1 já concluído, respostas do anfitrião existentes e quiz com cinco perguntas. Capítulos 2/3 sem progresso nem comentários. Botão de quiz desabilitado sem respostas. Persistência, player e novo envio não executados nesta rodada.
-
-Falhas de rede forçadas, comparação entre duas contas e matriz mobile/tablet não executadas nesta sessão. Layout responsivo foi revisado no CSS, sem certificação visual desses tamanhos. Consulte [cobertura QA](../03-qa-coverage.md).
+- Capítulo bloqueado: exibe aviso de pré-requisito e convite para concluir o quiz anterior.
+- Não autenticado: o botão de discussão redireciona para login preservando o destino; o progresso exibe convite de acesso.
+- Progresso 100%: uma vez concluído, o status de conclusão é preservado para fins de gamificação.
 
 ### Referência de implementação
 
 - [src/app/capitulos/[id]/page.tsx](../../../src/app/capitulos/[id]/page.tsx)
+- [src/components/chapters/chapter-progress.tsx](../../../src/components/chapters/chapter-progress.tsx)
+- [src/components/discussions/discussion-entry-button.tsx](../../../src/components/discussions/discussion-entry-button.tsx)
 - [src/features/chapters/actions.ts](../../../src/features/chapters/actions.ts)
 - [src/features/chapters/schemas.ts](../../../src/features/chapters/schemas.ts)
 - [src/features/catalog/queries.ts](../../../src/features/catalog/queries.ts)
-- [src/features/video-comments/actions.ts](../../../src/features/video-comments/actions.ts)
 - [src/features/host-prompts/actions.ts](../../../src/features/host-prompts/actions.ts)
-- [src/features/moderation/actions.ts](../../../src/features/moderation/actions.ts)
 
 [Índice do manual](../00-overview.md) · [Primeiros passos](../01-getting-started.md) · [Referência técnica](../02-technical-reference.md)

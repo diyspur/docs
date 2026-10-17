@@ -12,7 +12,7 @@ Sessão ativa. A adição ocorre na ficha do livro.
 
 ## 3. UI Components & Layout
 
-Contagem; títulos priorizados; acesso ao catálogo; remoção; estado vazio.
+Contagem de livros na fila (capacidade máxima 5); lista de títulos priorizados com capa e dados; botão de remoção atômica; atalho para gerenciar listas personalizadas e playlists (`/listas`, Excalidraw F41); estado vazio com link para o catálogo.
 
 ![Fila de próximos livros — captura da auditoria de 12/10/2026](../images/minha-fila.jpg)
 
@@ -20,10 +20,11 @@ Contagem; títulos priorizados; acesso ao catálogo; remoção; estado vazio.
 
 ## 4. Step-by-Step User Flow
 
-1. **Step 1:** Abra uma ficha no catálogo e use o botão de adicionar à fila.
-2. **Step 2:** Aguarde confirmação e abra **Minha fila** para consultar os títulos.
-3. **Step 3:** Clique no livro para iniciar o caminho para uma temporada.
-4. **Step 4:** Quando a fila atingir cinco títulos, remova um antes de adicionar outro.
+1. **Step 1:** Abra uma ficha no catálogo ou use sua estante pessoal e adicione o título à sua fila.
+2. **Step 2:** Abra **Minha fila** para consultar a ordem dos seus próximos 5 livros.
+3. **Step 3:** Clique no livro para abrir o clube oficial ou cronograma da temporada.
+4. **Step 4:** Para criar agrupamentos maiores ou playlists temáticas, utilize o atalho **"Gerenciar listas personalizadas"** que leva a `/listas` (F41).
+5. **Step 5:** Quando a fila atingir cinco títulos, remova um antes de priorizar um novo livro.
 
 ### Interação com o backend
 

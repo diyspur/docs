@@ -4,7 +4,7 @@
 
 - **URL Path:** `/diario`
 - **Access Level:** Authenticated
-- **Core Purpose:** Guardar anotações privadas e medidas de uma sessão de leitura.
+- **Core Purpose:** Atuar como um caderno aberto de impressões e reflexões de leitura sobre os livros (Excalidraw B15), onde métricas de páginas e minutos são estritamente opcionais para preservar a espontaneidade do leitor.
 
 ## 2. Prerequisites & Access
 

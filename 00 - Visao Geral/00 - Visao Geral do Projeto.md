@@ -11,11 +11,11 @@
 O **DIYSpur** é uma plataforma digital projetada para atuar como a **segunda tela do leitor contemporâneo**. 
 
 ### 1.1 O Que o DIYSpur É
-- Um clube de leitura inteligente, assíncrono e comunitário.
-- Uma plataforma que estrutura a leitura coletiva em **temporadas**, **semanas/encontros**, **capítulos** e **clubes de leitura oficiais e independentes**.
-- Um ecossistema de canais temáticos (`#geral`, `#spoilers`, `#capitulos`) com mensageria em tempo real, proteção ativa contra spoilers e barreiras de consentimento explícito.
+- Um clube de leitura inteligente, assíncrono e comunitário centrado na arquitetura canônica **1 livro = 1 clube oficial**.
+- Uma plataforma que estrutura a leitura coletiva em **temporadas**, **semanas/encontros**, **capítulos** e **clubes oficiais de discussão**.
+- Um ecossistema de canais temáticos por obra (`#sem-spoilers`, `#com-spoilers`, canais de capítulos) com mensageria em tempo real, proteção ativa contra spoilers e barreiras de consentimento explícito.
 - Uma ferramenta de acompanhamento canônico de leitura vinculada à edição específica do leitor (ISBN, páginas, formato).
-- Um motor de gamificação pedagógica (XP por quizzes compreensivos, streaks de leitura, diário de bordo e ranking comunitário de temporada vs livros mais lidos).
+- Um motor de gamificação pedagógica com regras claras (XP por capítulos, discussões, quizzes, streaks e encontros confirmados), diário de impressões flexível, múltiplas metas pessoais de leitura e ranking comunitário duplo: XP de Temporada vs Livros da Comunidade (Mais Lidos, Lendo Agora, Concluídos, Desistências com taxa de abandono).
 - Um sistema integrado de eventos literários com confirmação de presença (RSVP), exportação direta para o Google Agenda e download de arquivos `.ics` em total conformidade com a norma **RFC 5545**.
 
 ### 1.2 O Que o DIYSpur NÃO É
@@ -76,7 +76,7 @@ flowchart TD
 |---|---|---|
 | **Frontend Web** | Next.js 16 (App Router / Turbopack) + React 19 + TypeScript 5.8 | Renderização híbrida (RSC/SSR/Client), Server Actions tipadas, rotas dinâmicas, Touch Targets $\ge 48\text{px}$ e acessibilidade WCAG 2.2 AA. |
 | **Design System** | Nimble Tokens (CSS nativo com variáveis semânticas) | Interface editorial, tipografia Inter, paleta harmonizada e layout mobile-first ($375\text{px}$ a $1440\text{px}$). |
-| **Backend & Banco de Dados** | Supabase (PostgreSQL 17 / PGlite WASM) | 82 tabelas relacionais com RLS total, 12 migrações incrementais M01–M12, views anti-spoiler, concorrência otimista (`version`) e RPCs transacionais. |
+| **Backend & Banco de Dados** | Supabase (PostgreSQL 17 / PGlite WASM) | 82 tabelas relacionais com RLS total, 16 migrações versionadas (M01–M12 + hardening 20261018*), views de ranking e anti-spoiler, concorrência otimista (`version`) e RPCs transacionais. |
 | **Funções Serverless & Workers** | Supabase Edge Functions (Deno Runtime) | 11 funções ativas: `quiz-validate`, `award-xp`, `vote-next-book`, `scheduled-reminders`, `community-notification-worker`, `stripe-webhook`, `newsletter-dispatch`, recomendações e embeddings. |
 | **Mensageria & Realtime** | Supabase Realtime CDC (WebSockets `wss://`) + Outbox Pattern | Atualização instantânea de comentários, reações e notificações; drenagem resiliente de mensageria via `notification_outbox`. |
 | **Storage de Mídia** | Supabase Storage Buckets | Buckets `covers`, `avatars` e `feed-media` protegidos por políticas RLS. |
