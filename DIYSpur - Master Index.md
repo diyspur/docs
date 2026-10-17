@@ -47,6 +47,7 @@ graph TD
     %% Bloco 05: QA & Operações
     MOC --> QA["[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]"]
     MOC --> OPS["[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]"]
+    MOC --> DEPLOY["[[05.3 - Guia Completo de Deploy Vercel e Supabase]]"]
     
     %% Bloco 06: Referência Técnica & APIs
     MOC --> RPC["[[06.1 - Catalogo Completo de RPCs e Triggers PostgreSQL]]"]
@@ -99,6 +100,7 @@ graph TD
 ### Bloco 05: Qualidade, QA e Operação
 - **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suíte de 31 arquivos de testes e 132 testes unitários no Vitest, cobertura de build do Next.js e bateria PGlite de testes de banco.
 - **[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]**: Procedimentos de release, boas práticas de migrações aditivas, configuração de crons e resposta a incidentes.
+- **[[05.3 - Guia Completo de Deploy Vercel e Supabase]]**: Procedimento Operacional Padrão (SOP) para deploy via browser na Vercel e no Supabase (projeto `xjhehhfhhoomblcggjpk`), ordem de migrações e checklist de smoke test.
 
 ### Bloco 06: Referência Técnica e APIs
 - **[[06.1 - Catalogo Completo de RPCs e Triggers PostgreSQL]]**: Especificação de todas as Stored Procedures, parâmetros, permissões, contexto de segurança e triggers de integridade.
