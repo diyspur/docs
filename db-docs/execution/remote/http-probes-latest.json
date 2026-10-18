@@ -1,5 +1,5 @@
 {
-  "observed_at": "2026-10-09T03:02:31.341043+00:00",
+  "observed_at": "2026-10-18T00:00:52.177137+00:00",
   "project": "https://xjhehhfhhoomblcggjpk.supabase.co",
   "method": "GET; sem identidade de usuário",
   "results": [
@@ -91,10 +91,8 @@
     },
     {
       "path": "/functions/v1/award-xp",
-      "status": 405,
-      "body": {
-        "error": "method_not_allowed"
-      }
+      "status": 500,
+      "body": "Internal Server Error"
     },
     {
       "path": "/functions/v1/vote-next-book",

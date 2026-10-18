@@ -110,14 +110,14 @@ flowchart TD
 | Bloco | Rota / Superfície | Descrição e Especificação Técnica |
 |---|---|---|
 | **B01** | `/` (Home) | Entrada da aplicação com exibição da temporada ativa, catálogo e acesso ao ranking da temporada (**F28**). |
-| **B02** | Header / Menu | Barra de navegação global com links diretos para Catálogo, Cadastro, Diário, Notificações, Comunidade e Votação. |
-| **B03** | Footer | Rodapé global com links institucionais (Termos, Privacidade, Suporte) e redes sociais (Instagram, TikTok, YouTube). |
+| **B02** | Header / Menu | Barra de navegação global com links diretos para Livros (`/livros`), Cadastro, Diário, Notificações, dropdown Comunidade (Clubes e Conversas, Encontros, Votação) e Meu Ritmo. |
+| **B03** | Footer | Rodapé global sem botões residuais; links institucionais (Termos, Privacidade, Suporte) com ícones SVG e redes sociais (Instagram, TikTok, YouTube) com animações CSS exclusivas. |
 | **B04** | `/livros` | Catálogo de livros completo com busca por título e paginação. |
-| **B05** | `/livros/[slug]` | Ficha detalhada do livro com controle único "Sua leitura" (`BookReadingControl`), CTA único "Grupo do livro" (`DiscussionEntryButton`), link para temporada (**F07**), histórico (**F24**), convite por e-mail (**F25**) e desafios (**F29**). |
+| **B05** | `/livros/[slug]` | Ficha detalhada do livro com layout responsivo de 2 colunas no desktop (capa sticky 2:3 alinhada ao lado dos dados) e empilhamento vertical no mobile, controle canônico "Sua leitura" (`BookReadingControl`), CTA único "Grupo do livro" (`DiscussionEntryButton`), ações de compra na Amazon e compartilhamento. |
 | **B06** | `/temporadas/[slug]` | Cronograma da temporada do livro com capítulos publicados e bloqueados. |
 | **B07** | `/capitulos/[id]` | Segunda tela de vídeo, controle de progresso (`ChapterProgress`), botão "Comentar no grupo" e quiz. |
 | **B08** | `/cadastro` | Criação de conta de usuário com confirmação por e-mail. |
-| **B09** | `/entrar` | Login com suporte a `redirect` para retorno ao contexto prévio do leitor. |
+| **B09** | `/entrar` | Login com e-mail/senha, suporte a `redirect`, botão "Esqueci minha senha" direcionando para `/recuperar-senha` (substituindo a opção confusa de magic link). |
 | **B10** | `/recuperar-senha` | Solicitação de link de redefinição de credenciais. |
 | **B11** | `/atualizar-senha` | Formulário seguro para nova senha sob token de recuperação verificado. |
 | **B12** | `/perfil` | Central do leitor: links para Histórico, Metas, Desafios, Minha Fila, Rankings e Logout. |
@@ -131,7 +131,7 @@ flowchart TD
 | **B20** | `/listas` | Listas de leitura pessoais, públicas ou compartilhadas com colaboradores autorizados. |
 | **B21** | `/leituras-compartilhadas` | Espaço de leitura em grupo com convite de livros por e-mail para amigos. |
 | **B22** | `/notificacoes` | Central de notificações: convites recebidos, datas de encontros e lançamento de temporadas dos livros em leitura. |
-| **B23** | `/comunidade` | Diretório geral de clubes oficiais por livro ("Tem a lista de todos os clubes"). |
+| **B23** | `/comunidade` | Diretório geral de clubes e canais de discussão. Exibe cada clube oficial e seus respectivos canais de bate-papo (`#geral`, `#sem-spoilers`, `#capitulo-X`, `#com-spoilers`) com badges de proteção contra spoilers. |
 | **B24** | `/clubes` | Exploração de clubes oficiais com busca e paginação. |
 | **B25** | `/clubes/novo` | Resolvedor contextual: recebe `?livro=<UUID>`, entra no clube existente ou cria o grupo com os canais `sem-spoilers` e `com-spoilers`. |
 | **B26** | `/clubes/[slug]` | Hub do clube oficial com canais padrão, canais por capítulo e agenda de encontros. |

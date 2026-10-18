@@ -106,7 +106,18 @@ graph TD
 - **[[06.2 - Contrato de APIs HTTP, Edge Functions e Webhooks]]**: Contrato das rotas de API do Next.js App Router e das 11 Edge Functions do Supabase.
 - **[[06.3 - Dicionario de Telas, Componentes e Design Tokens Nimble]]**: Catálogo de componentes (`GlassCard`, `CyberButton`, `CyberSkeleton`), design tokens semânticos, iluminação especular, compensação ótica OLED, modos de densidade/acessibilidade e áreas de toque $\ge 48\text{px}$.
 
+### Apêndices: Manuais e Diretrizes Específicas por Repositório
+- **[[app-docs/manual/00-overview|Manual do Leitor e Catálogo de Telas (app-docs)]]**: Decomposição tela a tela e fluxos de navegação da aplicação leitor.
+- **[[app-docs/design-system|Especificação Detalhada do Design System (app-docs)]]**: Especificação canônica dos tokens e componentes CSS Nimble.
+- **[[app-docs/AGENTS|Instruções para Agentes e IAs — Frontend (app-docs)]]**: Diretrizes, escopo e comandos do repositório `app`.
+- **[[app-docs/CLAUDE|Guia de Estilo e Boas Práticas — Frontend (app-docs)]]**: Padrões de código, acessibilidade e convenções de interface.
+- **[[db-docs/supabase-reference|Referência de Banco e Schema Supabase (db-docs)]]**: Dicionário de dados, tabelas e relacionamentos do PostgreSQL.
+- **[[db-docs/AGENTS|Instruções para Agentes e IAs — Backend (db-docs)]]**: Invariantes de autorização RLS e convenções de migrations.
+- **[[db-docs/CLAUDE|Guia de Arquitetura e Segurança de Banco (db-docs)]]**: Regras de banco, `search_path`, funções `private` e RPCs.
+- **[[db-docs/SDDBD2|Especificação Consolidada do Banco (SDDBD2)]]**: Especificação executável de banco de dados.
+
 ---
 
 ## 🏷️ Tags Gerais para Obsidian
 `#diyspur` `#software-architecture` `#nextjs` `#supabase` `#postgresql` `#rls` `#pgvector` `#realtime` `#lgpd` `#gamification` `#telemetria` `#booktok` `#excalidraw` `#documentation` `#pentest` `#qa` `#nimble`
+
