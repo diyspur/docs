@@ -48,6 +48,7 @@ graph TD
     MOC --> OPS["[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]"]
     MOC --> DEPLOY["[[05.3 - Guia Completo de Deploy Vercel e Supabase]]"]
     MOC --> RETEST["[[05.4 - Registro de Reteste e Homologacao 2026-10-18]]"]
+    MOC --> TF["[[05.5 - Integracao de Recomendacoes TensorFlow e Persistencia Browser]]"]
     
     %% Bloco 06: Referência Técnica & APIs
     MOC --> RPC["[[06.1 - Catalogo Completo de RPCs e Triggers PostgreSQL]]"]
