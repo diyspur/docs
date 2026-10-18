@@ -47,6 +47,7 @@ graph TD
     MOC --> QA["[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]"]
     MOC --> OPS["[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]"]
     MOC --> DEPLOY["[[05.3 - Guia Completo de Deploy Vercel e Supabase]]"]
+    MOC --> RETEST["[[05.4 - Registro de Reteste e Homologacao 2026-10-18]]"]
     
     %% Bloco 06: Referência Técnica & APIs
     MOC --> RPC["[[06.1 - Catalogo Completo de RPCs e Triggers PostgreSQL]]"]
@@ -97,9 +98,10 @@ graph TD
 - **[[04.1 - Motor de Compartilhamento Social e Viral Loops]]**: Renderização assíncrona de cartões visuais para Instagram Stories e TikTok (`social_render_jobs`), Web Share API nativa e flywheel orgânico de UGC.
 
 ### Bloco 05: Qualidade, QA e Operação
-- **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suítes de testes automatizados: 31 arquivos e 132 testes unitários no `app`, 2 arquivos e 7 testes no `admin`, cobertura de build Next.js Turbopack e bateria PGlite de testes de banco.
+- **[[05.1 - Relatorio de QA, Casos de Teste e Quality Gates]]**: Suítes de testes automatizados: 48 arquivos e 207 testes unitários no `app`, 4 arquivos e 15 testes no `admin`, cobertura de build Next.js Turbopack e 10 suítes PGlite de testes de banco.
 - **[[05.2 - Runbook de Operacao, Migracoes e Incidentes]]**: Procedimentos de release, boas práticas de migrações aditivas, configuração de crons e resposta a incidentes.
 - **[[05.3 - Guia Completo de Deploy Vercel e Supabase]]**: Procedimento Operacional Padrão (SOP) para deploy via browser na Vercel e no Supabase (projeto `xjhehhfhhoomblcggjpk`), ordem de migrações e checklist de smoke test.
+- **[[05.4 - Registro de Reteste e Homologacao 2026-10-18]]**: Registro de reteste, resolução técnica dos 28 achados (QA-01 a QA-28), contratos de banco e evidências de conformidade dos 34 blocos e 41 setas.
 
 ### Bloco 06: Referência Técnica e APIs
 - **[[06.1 - Catalogo Completo de RPCs e Triggers PostgreSQL]]**: Especificação de todas as Stored Procedures, parâmetros, permissões, contexto de segurança e triggers de integridade.

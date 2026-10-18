@@ -89,8 +89,8 @@ Experiência interativa do leitor enquanto progride no livro:
 | **XP e Ranking Duplo** | Rota `/ranking` (XP de temporada com 5 regras explícitas: capítulos, comentários, quiz, streak, encontros) e `/ranking/livros` (4 abas: Mais Lidos, Lendo Agora, Concluídos, Desistências com `dnf_rate`). | ✅ **Homologado & Ativo** |
 | **Estante no Histórico** | Rota `/historico` sincronizada com `user_book_readings` e progresso de capítulos, com filtros (*Lendo*, *Quero Ler*, *Lidos*) e touch targets $\ge 48\text{px}$. | ✅ **Homologado & Ativo** |
 | **Diário de Bordo Livre** | Caderno aberto para anotações e pensamentos sobre obras (páginas e minutos lidos opcionais, B15), com privacidade estrita (`owner_only`). | ✅ **Homologado & Ativo** |
-| **Múltiplas Metas Pessoais & Fila** | Suporte a múltiplas metas de leitura simultâneas por usuário (B16) e gestão de priorização dos Top 5 próximos livros com link para `/listas` (F41). | ✅ **Homologado & Ativo** |
-| **Leituras Compartilhadas** | Espaço para convidar amigos para ler a mesma obra (B17) com suporte a `?livro=[slug]` e redirecionamentos para `/notificacoes`. | ✅ **Homologado & Ativo** |
+| **Múltiplas Metas Pessoais & Fila Contínua** | Suporte a múltiplas metas simultâneas por usuário (B16: livros, páginas e minutos com teto realista e agregação dinâmica) e fila contínua reordenável (B19) via RPC atômica `reorder_up_next` com link para `/listas` (F41). | ✅ **Homologado & Ativo** |
+| **Listas de Leitura & Colaboração** | Listas públicas, privadas e colaborativas (B20) com gestão de colaboradores (`inviteListCollaborator`/`removeListCollaborator`) e leituras compartilhadas (B21) com suporte a `?livro=[slug]` e redirecionamentos para `/notificacoes`. | ✅ **Homologado & Ativo** |
 
 ---
 
@@ -126,7 +126,7 @@ Sustentação operacional, mensageria e infraestrutura de suporte:
 | **Monetização via Afiliados** | Links rastreados da Amazon com proteção de privacidade (`ip_hash`) em `/api/affiliate/[slug]`. | ✅ **Homologado & Ativo** |
 | **Event Sourcing no Stripe** | Tabela `payment_events` com idempotência por `event_id` para subscrições e benefícios. | ✅ **Homologado & Ativo** |
 | **Observabilidade e Telemetria** | Sentry para rastreamento de erros e PostHog com dicionário estrito `ProductEventMap` ativado sob consentimento. | ✅ **Homologado & Ativo** |
-| **Quality Gates de CI/CD** | 100% de aprovação em TypeScript strict, ESLint, 132 testes unitários no Vitest e 6 suítes PGlite. | ✅ **Homologado & Ativo** |
+| **Quality Gates de CI/CD** | 100% de aprovação em TypeScript strict, ESLint, 207 testes unitários no Vitest em `app`, 15 testes em `admin` e 10 suítes PGlite em `db`. | ✅ **Homologado & Ativo** |
 
 ---
 

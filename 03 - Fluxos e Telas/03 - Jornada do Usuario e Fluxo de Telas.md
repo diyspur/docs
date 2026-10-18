@@ -139,22 +139,22 @@ flowchart TD
 | **B28** | `/votacao` | Enquetes da comunidade para escolha das próximas obras a serem debatidas. |
 | **B29** | `/privacidade` | Política de privacidade e governança de dados pessoais (LGPD). |
 | **B30** | `/termos` | Termos de uso e diretrizes comunitárias. |
-| **B31** | `/admin` | Painel de administração geral com atalhos para Livros, Temporadas e Moderação. |
-| **B32** | `/admin/books` | Gestão do catálogo editorial de livros e metadados. |
-| **B33** | `/admin/seasons/[id]` | Editor da temporada e capítulos do livro. |
-| **B34** | `/admin/moderation` | Painel de revisão de denúncias e sanções de moderação. |
+| **B31** | `/admin` | Painel de administração geral integrado nativamente no `app` com guard `requireAdmin` e RPC `is_admin`, com métricas e atalhos para Livros, Temporadas e Moderação (**F01..F03**). |
+| **B32** | `/admin/books` | Gestão do catálogo editorial de livros e metadados com validação Zod e auditoria atômica em `editorial_audit_log`. |
+| **B33** | `/admin/seasons/[id]` | Editor da temporada e capítulos do livro com controle de datas ISO e cronograma editorial. |
+| **B34** | `/admin/moderation` | Painel de revisão de denúncias e sanções de moderação integrado à RPC `moderate_content_report`. |
 
 ---
 
-## 3. Especificações Visuais e Micro-Interações Next-Gen (Refatoração UI/UX)
+## 3. Especificações Visuais e Design Tokens Semânticos (Refatoração UI/UX)
 
-A refatoração visual e funcional do ecossistema DIYSpur elevou a experiência de navegação e retenção, adotando a linguagem de design futurista e minimalista com aceleração por GPU (60fps P99):
+A refatoração visual do ecossistema DIYSpur padronizou toda a camada de estilos em **CSS Semântico Puro** baseado em Design Tokens (`src/styles/tokens.css` e `src/styles/global.css`), eliminando classes utilitárias órfãs e garantindo consistência, acessibilidade WCAG 2.2 AA e aceleração por GPU (60fps P99):
 
 ### 3.1 B01 — Home Mission Control (`/`)
-- **Aura Atmosférica Dinâmica:** Radial gradient no topo (`from-brand-500/10 via-brand-600/5 to-transparent`) com `pointer-events-none` sem repintura do layout.
-- **Badge Operacional em Tempo Real:** Indicador com animação contínua `animate-pulse-glow` e ponto de status verde esmeralda (`bg-emerald-500`), informando a temporada e capítulos ativos.
-- **Hero Foco e Fitts/Hick:** Título responsivo com destaque em gradiente futurista (`bg-gradient-to-r from-white via-zinc-200 to-zinc-400 bg-clip-text text-transparent`), subtítulo em densidade tipográfica compensada (380/480) e ações primárias/secundárias claras com `CyberButton`.
-- **Bento-Grid de Descoberta:** Cards de destaque operacional encapsulados em `GlassCard` com micro-bordas de 1px e backdrop blur de 12px.
+- **Aura Atmosférica Dinâmica:** Radial gradient no topo via CSS (`background: radial-gradient(...)`) com `pointer-events-none` sem repintura do layout.
+- **Badge Operacional em Tempo Real:** Indicador com animação contínua e ponto de status verde esmeralda (`var(--color-brand-emerald)`), informando a temporada e capítulos ativos.
+- **Hero Foco e Fitts/Hick:** Título responsivo com destaque tipográfico, subtítulo com alto contraste e ações primárias/secundárias claras com `CyberButton` (`cyber-button--primary`, `cyber-button--secondary`).
+- **Bento-Grid de Descoberta:** Cards de destaque operacional encapsulados em `GlassCard` com micro-bordas de 1px e backdrop blur de 12px via tokens semânticos (`var(--glass-background)`, `var(--glass-border)`).
 
 ### 3.2 B02 — Sticky Frosted Glass Header (`SiteHeader`)
 - **Profundidade Adaptativa:** Efeito de vidro jateado (`backdrop-blur-md bg-white/70 dark:bg-black/80`) com borda inferior de 1px (`border-zinc-200/80 dark:border-white/10`).
